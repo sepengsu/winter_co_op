@@ -386,14 +386,14 @@ class GaitGym(SconeGym):
         self.total_steps += 1
         self.steps += 1
         #return self.custom_reward()
-        return self.reward_lua()
+        return self.reward_total()
 
     def custom_reward(self):
         self._update_rwd_dict()
         return np.sum(list(self.rwd_dict.values())) # 이게 reward
     
-    def reward_lua(self):
-        return creward.reward_from_lua(self.model,self.head_body,self.grf)
+    def reward_total(self):
+        return creward.rewardfunction(self.model,self.head_body,self.grf,self.prev_excs)
 
     def _update_rwd_dict(self):
         self.rwd_dict = {

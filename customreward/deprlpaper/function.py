@@ -21,14 +21,15 @@ PARA={
     "beta" : 0.8,# running avg. smoothing
     "labmda": 0.9# decay term
 }
+from ..measureLua import limitforce
 
-def total_reward(model, head_body,parameters = PARA):
+def total_reward(model, head_body,prev_excs,parameters = PARA):
     '''
     논문참조 : https://arxiv.org/pdf/2309.02976.pdf
     https://sites.google.com/view/naturalwalkingrl
 
     '''
-    r = r_vel(model) -c_effort(model,head_body,parameters['w1'],parameters['w2'],parameters) - c_pain(model,model.bodies(),parameters['w3'],parameters['w4'])
+    r = r_vel(model) - c_effort(model,head_body,prev_excs,parameters['w1'],parameters['w2'],parameters) - c_pain(model,model.bodies(),parameters['w3'],parameters['w4'])
 
     return r
 
@@ -39,20 +40,26 @@ def r_vel(model,v_target = 1.2):
         r = 1
     return r
 
-def c_effort(model,head_body,w1:float,w2:float,parameters:dict):
+def c_effort(model,head_body,prev_excs,w1:float,w2:float,parameters:dict):
+    #a =np.sqrt(np.sum(model.muscle_excitation_array()**2))**3
     a = 0
-    u= 0
-    u_prev = 0
-    N_active = 0
-    c = a**3 +w1*(u-u_prev)**2 + w2*N_active
+    u= model.muscle_excitation_array()
+    u_prev = prev_excs
+    delta_excs = u-u_prev
+    delta_excs = _vector_sum(delta_excs)
+    N_active = _vector_sum(model.muscle_activation_array())
+    c = a**3 +w1*(delta_excs)**2 + w2*N_active
     #c  = alpha_t()a**3 +w1*(u-u_prev)**2 + w2*N_active
     return c
 
 def c_pain(model,bodies:list,w3:float,w4:float):
     limit_torque = [item.limit_torque().array() for item in model.joints()]
     sum_tau = all_com_sum(limit_torque)
-    sum_f = 
+    foot_l = model.bodies()[7].contact_force().array()
+    foot_r = model.bodies()[4].contact_force().array()
+    sum_f = _vector_sum(foot_l)+ _vector_sum(foot_r)
     c = w3*sum_tau + w4*sum_f
+    return c
 
 
 def all_com_sum(List: list):
@@ -61,4 +68,4 @@ def all_com_sum(List: list):
         s+= _vector_sum(item)
     return s
 def _vector_sum(vector:np.array):
-    return np.sum(vector**2)
+    return np.sqrt(np.sum(vector**2))

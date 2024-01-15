@@ -8,6 +8,7 @@ import gym
 import numpy as np
 from . import measureLua as lua
 from . import balance
+from . import deprlpaper as dep
 
 # Add sconepy folders to path
 if sys.platform.startswith("win"):
@@ -30,12 +31,13 @@ DEFAULT_WEIGHTS = {'Gait': 100,
 '''
 아래 함수들은 나중에 Gaitgym.py에서 custom_reward에서 이를 설정하면 된다!!!!
 '''
-def rewardfunction(model,head_hody, grf):
+def rewardfunction(model,head_hody, grf,prev_excs):
     '''
     종합
     '''
-    reward = reward_from_lua(model,head_hody,grf) + balance_reward(model,head_hody,grf)
+    #reward = reward_from_lua(model,head_hody,grf) + balance_reward(model,head_hody,grf)
     #reward = reward_from_lua(model,head_hody,grf)
+    reward = dep.total_reward(model,head_hody,prev_excs)
     return reward
 
 def reward_from_lua(model,head_body,grf,weights = DEFAULT_WEIGHTS,eff_type = 'TotalForce'):
