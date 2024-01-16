@@ -23,8 +23,8 @@ def rewardfunction(model,head_hody, grf,prev_excs):
     '''
     종합
     '''
-    reward = balance_reward(model,head_hody,prev_excs)
-
+    #reward = balance_reward(model,head_hody,prev_excs)
+    reward =0
     return reward
 
 
