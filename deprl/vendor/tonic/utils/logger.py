@@ -227,7 +227,7 @@ class Logger:
             with open(self.log_file_path, "a") as file:
                 file.write(",".join(map(str, vals)) + "\n")
         # display 일부
-        log(f"테스트 결과 평균 reward: {self.epoch_dict['test/episode_score/mean']}")
+        log(f"테스트 결과 평균 reward: {round(self.epoch_dict['test/episode_score/mean'],3)}")
         self.epoch_dict.clear()
         self.last_epoch_progress = None
         self.last_epoch_time = time.time()

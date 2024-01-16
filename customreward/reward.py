@@ -30,9 +30,9 @@ def rewardfunction(model,head_hody, grf,prev_excs):
 
 
 BALANCE_WEIGHTS = {
-    'diff_position_z':-0.1,
-    'position_z':-0.05,
-    'velocity_z':-0.1,
+    'diff_position_z':-0.5,
+    'position_z':-0.1,
+    'velocity_z':-0.5,
 }
 
 
