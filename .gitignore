@@ -3,3 +3,4 @@ results/
 site-packages/
 temp/
 **/*.pyc
+temp.ipynb
