@@ -12,4 +12,4 @@ elif sys.platform.startswith('darwin'):
 import sconepy
 
 def alpha_t(cur_reward,theta,labmda):
-    
+    pass

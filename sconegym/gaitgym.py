@@ -385,8 +385,8 @@ class GaitGym(SconeGym):
         """
         self.total_steps += 1
         self.steps += 1
-        #return self.custom_reward()
-        return self.reward_total()
+        return self.custom_reward()
+        #return self.reward_total()
 
     def custom_reward(self):
         self._update_rwd_dict()
