@@ -28,12 +28,12 @@ def find_model_file(model_file):
 
 
 DEFAULT_REW_KEYS = {
-    "vel_coeff": 10,
-    "grf_coeff": 0.0,
-    "joint_limit_coeff": "0.0",
+    "vel_coeff": 1,
+    "grf_coeff": -0.073,
+    "joint_limit_coeff": -0.131,
     "smooth_coeff": 0.0,
-    "nmuscle_coeff": 0.0,
-    "self_contact_coeff": 0.0,
+    "nmuscle_coeff": -1.579,
+    "self_contact_coeff":0.0,
 }
 
 class SconeGym(gym.Env, ABC):

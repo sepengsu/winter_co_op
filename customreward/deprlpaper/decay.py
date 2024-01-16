@@ -11,5 +11,6 @@ elif sys.platform.startswith('darwin'):
     sys.path.append("/Applications/SCONE.app/Contents/MacOS/lib")
 import sconepy
 
-def alpha_t(cur_reward,theta,labmda):
+def alpha_t(r,theta,beta,delta_a,labmda,r_mean):
+    R_mean = beta*r_mean + (1-beta)*r
     pass

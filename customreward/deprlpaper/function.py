@@ -21,12 +21,12 @@ PARA={
     "beta" : 0.8,# running avg. smoothing
     "labmda": 0.9# decay term
 }
-from ..measureLua import limitforce
 
 def total_reward(model, head_body,prev_excs,parameters = PARA):
     '''
     논문참조 : https://arxiv.org/pdf/2309.02976.pdf
     https://sites.google.com/view/naturalwalkingrl
+    Sconegym에 구현되어 있음 - 그대로 사용 
 
     '''
     r = r_vel(model) - c_effort(model,head_body,prev_excs,parameters['w1'],parameters['w2'],parameters) - c_pain(model,model.bodies(),parameters['w3'],parameters['w4'])
