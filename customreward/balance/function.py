@@ -28,7 +28,7 @@ class MyBalance():
         def position_z(self):
             pos = self.head_body.com_pos().z
             r = np.exp(-abs(pos))
-            return 
+            return r
 
         def velocity_z(self):
             wm = 0.3

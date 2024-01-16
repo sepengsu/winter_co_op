@@ -18,9 +18,7 @@ elif sys.platform.startswith('darwin'):
     sys.path.append("/Applications/SCONE.app/Contents/MacOS/lib")
 
 import sconepy
-'''
-아래 함수들은 나중에 Gaitgym.py에서 custom_reward에서 이를 설정하면 된다!!!!
-'''
+
 def rewardfunction(model,head_hody, grf,prev_excs):
     '''
     종합
