@@ -7,7 +7,7 @@ from typing import Optional
 import gym
 import numpy as np
 from . import measureLua as lua
-from . import balance
+from .balance import StaticBalance
 from . import deprlpaper as dep
 
 # Add sconepy folders to path
@@ -35,10 +35,8 @@ def rewardfunction(model,head_hody, grf,prev_excs):
     '''
     종합
     '''
-    #reward = reward_from_lua(model,head_hody,grf) + balance_reward(model,head_hody,grf)
-    #reward = reward_from_lua(model,head_hody,grf)
-    #reward = dep.total_reward(model,head_hody,prev_excs)
-    reward = 0
+    reward = balance_reward(model,head_hody,prev_excs)
+    #reward = 0
     return reward
 
 def reward_from_lua(model,head_body,grf,weights = DEFAULT_WEIGHTS,eff_type = 'TotalForce'):
@@ -75,24 +73,18 @@ def reward_from_lua(model,head_body,grf,weights = DEFAULT_WEIGHTS,eff_type = 'To
     rwd_dict[names[5]] = 0
     return _sum_weight_and_rwd(weights,rwd_dict)
 
-BALANCE_WEIGHTS = {'velocity':-0.1,
-                   'position':-0.01,
-                   'upright':0.1}
+BALANCE_WEIGHTS = {'diff_position_z':-0.01,
+                   'position_z':-0.005,
+                   }
 
 
 def balance_reward(model,head_body,grf,weights = BALANCE_WEIGHTS):
-    rwd_dict = dict()
-    names = list(BALANCE_WEIGHTS.keys())    
-    #1. Velocity Z
-    rwd_dict[names[0]] = 0
-    #2. Position Z
-    rwd_dict[names[1]] = balance.absposition(model,head_body)
-
-    #3. upright_reward
-    # https://arxiv.org/ftp/arxiv/papers/2308/2308.04462.pdf 참고
-    rwd_dict[names[2]] = balance.upright_reward(model,head_body)
-
-    return _sum_weight_and_rwd(weights,rwd_dict)   
+    '''
+    balance를 위한 각종 함수 
+    '''
+    balance = StaticBalance(weights,model,head_body)   
+    reward = balance.return_reward()
+    return reward    
 
 def _sum_weight_and_rwd(weights:dict,rwd_dict:dict):
     '''이 함수는 weight x reward를 계산하는 함수이다.'''

@@ -1,1 +1,1 @@
-from .function import absposition
+from .function import StaticBalance

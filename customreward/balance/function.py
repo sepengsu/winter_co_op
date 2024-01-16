@@ -12,13 +12,31 @@ elif sys.platform.startswith('darwin'):
 
 import sconepy
 
-def absposition(model, head_body):
-    pos = head_body.com_pos().z
+class StaticBalance():
+        def __init__(self,weight_dict,model,head_body):
+            self.weight_dict = weight_dict
+            self.model = model
+            self.head_body = head_body
+            self.rwd_dict = dict()
+    
+        def diff_position_z(self):
+            pos_m = self.model.com_pos().z
+            pos_h = self.head_body.com_pos().z
+            r = np.exp(-(abs(pos_m-pos_h))**2)
+            r=0
+            return r
+        
+        def position_z(self):
+            pos = self.head_body.com_pos().z
+            pos =0
+            return abs(pos)
+        
+        def return_reward(self):
+            for name in self.weight_dict:
+                self.rwd_dict[name] = getattr(self,name)()
+            
+            return _sum_weight_and_rwd(self.weight_dict,self.rwd_dict)
 
-    return abs(pos)
-
-def upright_reward(model,head_body):
-    pos_m = model.com_pos().z
-    pos_h = head_body.com_pos().z
-    r = np.exp(-(abs(pos_m-pos_h))**2)
-    return r
+def _sum_weight_and_rwd(weights:dict,rwd_dict:dict):
+    '''이 함수는 weight x reward를 계산하는 함수이다.'''
+    return sum(weights[key] * rwd_dict[key] for key in weights if key in rwd_dict)      
