@@ -37,7 +37,8 @@ def rewardfunction(model,head_hody, grf,prev_excs):
     '''
     #reward = reward_from_lua(model,head_hody,grf) + balance_reward(model,head_hody,grf)
     #reward = reward_from_lua(model,head_hody,grf)
-    reward = dep.total_reward(model,head_hody,prev_excs)
+    #reward = dep.total_reward(model,head_hody,prev_excs)
+    reward = 0
     return reward
 
 def reward_from_lua(model,head_body,grf,weights = DEFAULT_WEIGHTS,eff_type = 'TotalForce'):
