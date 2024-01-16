@@ -4,3 +4,5 @@ site-packages/
 temp/
 **/*.pyc
 temp.ipynb
+soncepy_1228.ipynb
+using_source.ipynb
