@@ -12,7 +12,7 @@ elif sys.platform.startswith('darwin'):
 
 import sconepy
 
-class StaticBalance():
+class MyBalance():
         def __init__(self,weight_dict,model,head_body):
             self.weight_dict = weight_dict
             self.model = model
@@ -23,14 +23,21 @@ class StaticBalance():
             pos_m = self.model.com_pos().z
             pos_h = self.head_body.com_pos().z
             r = np.exp(-(abs(pos_m-pos_h))**2)
-            r=0
             return r
         
         def position_z(self):
             pos = self.head_body.com_pos().z
-            pos =0
-            return abs(pos)
-        
+            r = np.exp(-abs(pos))
+            return 
+
+        def velocity_z(self):
+            wm = 0.3
+            wh = 1-wm
+            vel_m = self.model.com_vel().z
+            vel_h = self.head_body.com_vel().z
+            return wm*vel_m+wh*vel_h
+
+   
         def return_reward(self):
             for name in self.weight_dict:
                 self.rwd_dict[name] = getattr(self,name)()

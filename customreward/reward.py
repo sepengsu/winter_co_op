@@ -7,8 +7,7 @@ from typing import Optional
 import gym
 import numpy as np
 from . import measureLua as lua
-from .balance import StaticBalance
-from . import deprlpaper as dep
+from .balance import MyBalance
 
 # Add sconepy folders to path
 if sys.platform.startswith("win"):
@@ -19,15 +18,6 @@ elif sys.platform.startswith('darwin'):
     sys.path.append("/Applications/SCONE.app/Contents/MacOS/lib")
 
 import sconepy
-
-DEFAULT_WEIGHTS = {'Gait': 100,
- 'Effort': -1.3079,
- 'ActivationSquared': -0.0009657,
- 'HeadAcceleration': -1.1628,
- 'GRFJerk': -0.2494,
- 'KneeLimitForce': -0.25,
- 'DoLimits': -0.1}
-
 '''
 아래 함수들은 나중에 Gaitgym.py에서 custom_reward에서 이를 설정하면 된다!!!!
 '''
@@ -36,8 +26,43 @@ def rewardfunction(model,head_hody, grf,prev_excs):
     종합
     '''
     reward = balance_reward(model,head_hody,prev_excs)
-    #reward = 0
+
     return reward
+
+
+
+BALANCE_WEIGHTS = {
+    'diff_position_z':-0.01,
+    'position_z':-0.005,
+    'velocity_z':-0.01,
+}
+
+
+def balance_reward(model,head_body,grf,weights = BALANCE_WEIGHTS):
+    '''
+    balance를 위한 각종 함수 
+    '''
+    balance = MyBalance(weights,model,head_body)   
+    reward = balance.return_reward()
+    return reward    
+
+
+'''
+이 부분은 나중에 삭제 or 정리 예정
+'''
+
+def _sum_weight_and_rwd(weights:dict,rwd_dict:dict):
+    '''이 함수는 weight x reward를 계산하는 함수이다.'''
+    return sum(weights[key] * rwd_dict[key] for key in weights if key in rwd_dict)
+
+
+DEFAULT_WEIGHTS = {'Gait': 100,
+ 'Effort': -1.3079,
+ 'ActivationSquared': -0.0009657,
+ 'HeadAcceleration': -1.1628,
+ 'GRFJerk': -0.2494,
+ 'KneeLimitForce': -0.25,
+ 'DoLimits': -0.1}
 
 def reward_from_lua(model,head_body,grf,weights = DEFAULT_WEIGHTS,eff_type = 'TotalForce'):
     ''' 
@@ -72,20 +97,3 @@ def reward_from_lua(model,head_body,grf,weights = DEFAULT_WEIGHTS,eff_type = 'To
     #7. DoLimits
     rwd_dict[names[5]] = 0
     return _sum_weight_and_rwd(weights,rwd_dict)
-
-BALANCE_WEIGHTS = {'diff_position_z':-0.01,
-                   'position_z':-0.005,
-                   }
-
-
-def balance_reward(model,head_body,grf,weights = BALANCE_WEIGHTS):
-    '''
-    balance를 위한 각종 함수 
-    '''
-    balance = StaticBalance(weights,model,head_body)   
-    reward = balance.return_reward()
-    return reward    
-
-def _sum_weight_and_rwd(weights:dict,rwd_dict:dict):
-    '''이 함수는 weight x reward를 계산하는 함수이다.'''
-    return sum(weights[key] * rwd_dict[key] for key in weights if key in rwd_dict)

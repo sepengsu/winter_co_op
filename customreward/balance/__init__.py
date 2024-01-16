@@ -1,1 +1,1 @@
-from .function import StaticBalance
+from .function import MyBalance
