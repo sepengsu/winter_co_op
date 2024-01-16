@@ -4,6 +4,8 @@ conegym에서 gaitgym.py를 수정함
 deprl\vendor\tonic\utils\logger.py 에서 logger.py에서 코드 수정 - 169-190 코드 삭제 
   11:39 대폭 수정함
 
+ deprl\vendor\tonic\utils\logger.py에서 평균 reward 출력하게 함
+
 deprl\vendor\tonic\play.py 에서 Loading experiment from 삭제
 
 deprl\vendor\tonic\replays\buffers.py 에서 Saving buffer 출력 삭제
