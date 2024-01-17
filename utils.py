@@ -2,6 +2,8 @@ import datetime
 import time
 from deprl import main
 import os
+import re
+
 def run_training(config:dict,eporchs:int):
     print(datetime.datetime.now().strftime("%Y년 %m월 %d일 %H:%M:%S"))
     for i in range(eporchs):    
@@ -45,6 +47,7 @@ def get_directory_path():
             continue
 
 def configmake(config:dict):
+    config["tonic"]['step_per_epoch'] = step_per_epoch(config["tonic"]['trainer'])
     while True:
         cur =input("설정을 바꾸시겠습니까? (y/n)")
         if cur =="N" or cur =="n":
@@ -67,4 +70,8 @@ def generate_trainer_string(inputs:list):
 
 def make_trainer_string(trainer:str,steps:str,epoch:int):
     return trainer.replace(f"steps={int(steps)}",f"steps={int(steps)*epoch}")
+
+def step_per_epoch(code:str):
+    step_match = re.search(r'steps=(.*?)[,\)]', code)[0]
+    return float(step_match[10:-1])
 
