@@ -60,11 +60,14 @@ def configmake(config:dict):
             sel = input("어떤 것을 바꾸시겠습니가? 1: 이름만, 2: step만, 3: 모두")
             if sel =="1":
                 config['tonic']["name"] = input("이름을 입력하세요")
+                break
             elif sel =="2":
                 config['tonic']["trainer"], config["tonic"]['step_per_epoch'] = _generate_trainer_string(input("ex) 2e5,2e5,2e5").split(","))
+                break
             elif sel =="3":
                 config['tonic']["name"] = input("이름을 입력하세요")
                 config['tonic']["trainer"], config["tonic"]['step_per_epoch'] = _generate_trainer_string(input("ex) 2e5,2e5,2e5").split(","))
+                break
             else:
                 print("잘못된 입력입니다.")
                 continue
@@ -74,7 +77,7 @@ def configmake(config:dict):
     return config    
 
 def _generate_trainer_string(inputs:list):
-        return inputs[0],f"deprl.custom_trainer.Trainer(steps={int(float(inputs[0]))}, epoch_steps={int(float(inputs[1]))}, save_steps={int(float(inputs[2]))})"
+        return f"deprl.custom_trainer.Trainer(steps={int(float(inputs[0]))}, epoch_steps={int(float(inputs[1]))}, save_steps={int(float(inputs[2]))})", inputs[0]
 
 def _make_trainer_string(trainer:str,steps:str,epoch:int):
     return trainer.replace(f"steps={int(float(steps))}",f"steps={int(float(steps))*epoch}")

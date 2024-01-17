@@ -24,7 +24,7 @@ class Trainer:
         epoch_steps=2e4,
         save_steps=5e5,
         test_episodes=20,
-        show_progress=True,
+        show_progress=False,
         replace_checkpoint=False,
     ):
         assert epoch_steps <= save_steps
@@ -70,7 +70,6 @@ class Trainer:
                 observations, self.steps, muscle_states, greedy_episode
             )
             assert not np.isnan(actions.sum())
-            # raise Exception(f'{type(self.environment.environments[0])}')
             logger.store("train/action", actions, stats=True)
 
             # Take a step in the environments.
@@ -84,7 +83,6 @@ class Trainer:
             self.steps += num_workers
             epoch_steps += num_workers
             steps_since_save += num_workers
-
             # Show the progress bar.
             if self.show_progress:
                 logger.show_progress(
@@ -93,7 +91,7 @@ class Trainer:
 
             # Check the finished episodes.
             for i in range(num_workers):
-                if info["resets"][i] or True:
+                if info["resets"][i]:
                     logger.store("train/episode_score", scores[i], stats=True)
                     logger.store(
                         "train/episode_length", lengths[i], stats=True
