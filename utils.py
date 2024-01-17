@@ -66,12 +66,14 @@ def configmake(config:dict):
     return config    
 
 def _generate_trainer_string(inputs:list):
-        return inputs[0],f"deprl.custom_trainer.Trainer(steps={int(inputs[0])}, epoch_steps={int(inputs[1])}, save_steps={int(inputs[2])})"
+        return inputs[0],f"deprl.custom_trainer.Trainer(steps={int(float(inputs[0]))}, epoch_steps={int(float(inputs[1]))}, save_steps={int(float(inputs[2]))})"
 
 def _make_trainer_string(trainer:str,steps:str,epoch:int):
     return trainer.replace(f"steps={int(steps)}",f"steps={int(steps)*epoch}")
 
 def _step_per_epoch(code:str):
     step_match = re.search(r'steps=(.*?)[,\)]', code)[0]
-    return float(step_match[10:-1])
+    return step_match[10:-1]
 
+if __name__ == "__main__":
+    print(_generate_trainer_string(input("ex) 2e5,2e5,2e5").split(",")))
