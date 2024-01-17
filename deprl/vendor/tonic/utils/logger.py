@@ -132,7 +132,7 @@ class Logger:
             values = self.epoch_dict[key]
             if key in self.stat_keys:
                 self.epoch_dict[key + "/mean"] = np.mean(values)
-                self.epoch_dict[key + "/std"] = np.std(values)
+                # self.epoch_dict[key + "/std"] = np.std(values)
                 self.epoch_dict[key + "/min"] = np.min(values)
                 self.epoch_dict[key + "/max"] = np.max(values)
                 self.epoch_dict[key + "/size"] = len(values)
@@ -189,6 +189,9 @@ class Logger:
                 spaces = " " * (self.width - len(left))
                 print(left + spaces)
         print()'''
+        # display 일부
+        log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}")
+        log(f"테스트 평균 reward: {round(self.epoch_dict['test/episode_score/mean'],2)}")
 
         # Save the data to the log file
         vals = [self.epoch_dict.get(key) for key in self.final_keys]
@@ -226,8 +229,7 @@ class Logger:
         else:
             with open(self.log_file_path, "a") as file:
                 file.write(",".join(map(str, vals)) + "\n")
-        # display 일부
-        log(f"테스트 결과 평균 reward: {round(self.epoch_dict['test/episode_score/mean'],3)}")
+
         self.epoch_dict.clear()
         self.last_epoch_progress = None
         self.last_epoch_time = time.time()
@@ -245,17 +247,17 @@ class Logger:
         epoch_steps = (steps - 1) % num_epoch_steps + 1
         epoch_progress = int(self.width * epoch_steps / num_epoch_steps)
         if epoch_progress != self.last_epoch_progress:
-            current_time = time.time()
-            seconds = current_time - self.start_time
-            seconds_per_step = seconds / steps
-            epoch_rem_steps = num_epoch_steps - epoch_steps
-            epoch_rem_secs = max(epoch_rem_steps * seconds_per_step, 0)
-            epoch_rem_secs = datetime.timedelta(seconds=epoch_rem_secs + 1e-6)
-            epoch_rem_secs = str(epoch_rem_secs)[:-7]
-            total_rem_steps = num_steps - steps
-            total_rem_secs = max(total_rem_steps * seconds_per_step, 0)
-            total_rem_secs = datetime.timedelta(seconds=total_rem_secs)
-            total_rem_secs = str(total_rem_secs)[:-7]
+            # current_time = time.time()
+            # seconds = current_time - self.start_time
+            # seconds_per_step = seconds / steps
+            # epoch_rem_steps = num_epoch_steps - epoch_steps
+            # epoch_rem_secs = max(epoch_rem_steps * seconds_per_step, 0)
+            # epoch_rem_secs = datetime.timedelta(seconds=epoch_rem_secs + 1e-6)
+            # epoch_rem_secs = str(epoch_rem_secs)[:-7]
+            # total_rem_steps = num_steps - steps
+            # total_rem_secs = max(total_rem_steps * seconds_per_step, 0)
+            # total_rem_secs = datetime.timedelta(seconds=total_rem_secs)
+            # total_rem_secs = str(total_rem_secs)[:-7]
             #msg = f"Time left:  epoch {epoch_rem_secs}  total {total_rem_secs}"
             #msg = msg.center(self.width)
             #print(

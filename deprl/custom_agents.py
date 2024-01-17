@@ -149,19 +149,19 @@ def dep_factory(mix, instance):
             return self.dep_step(muscle_states, steps)
 
     if mix == 1:
-        logger.log("Initial exploration DEP")
+        #logger.log("Initial exploration DEP")
         return InitExploreDEP
     elif mix == 2:
-        logger.log("Deterministic Switch-DEP.")
+        #logger.log("Deterministic Switch-DEP.")
         return DetSwitchDep
     elif mix == 3:
-        logger.log("Stochastic Switch-DEP. Paper version.")
+        #logger.log("Stochastic Switch-DEP. Paper version.")
         return StochSwitchDep
     elif mix == 4:
-        logger.log("Pure DEP.")
+        #logger.log("Pure DEP.")
         return PureDep
     elif mix == 0:
-        logger.log("No DEP")
+        #logger.log("No DEP")
         return UnmixedAgent
     else:
         raise Exception("Invalid agent specified")

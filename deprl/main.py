@@ -129,13 +129,13 @@ def set_tensor_device():
     # use CUDA or apple metal
     if torch.cuda.is_available():
         torch.set_default_device("cuda")
-        logger.log("CUDA detected, storing default tensors on it.")
+        # logger.log("CUDA detected, storing default tensors on it.")
     elif torch.backends.mps.is_available():
         torch.set_default_device("mps")
-        logger.log("MPS detected, storing default tensors on it.")
+        # logger.log("MPS detected, storing default tensors on it.")
     else:
-        logger.log("No CUDA or MPS detected, running on CPU")
-
+        # logger.log("No CUDA or MPS detected, running on CPU")
+        pass
 
 def main(config):
     if "cpu_override" in config["tonic"] and config["tonic"]["cpu_override"]:
