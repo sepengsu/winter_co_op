@@ -130,7 +130,7 @@ class Logger:
         keys = list(self.epoch_dict.keys())
         for key in keys:
             values = self.epoch_dict[key]
-            if key in self.stat_keys:
+            if key in self.stat_keys and key in ["train/episode_score","test/episode_score"]:
                 self.epoch_dict[key + "/mean"] = np.mean(values)
                 # self.epoch_dict[key + "/std"] = np.std(values)
                 self.epoch_dict[key + "/min"] = np.min(values)
@@ -207,6 +207,7 @@ class Logger:
         # display 일부
         log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}")
         log(f"테스트 평균 reward: {round(self.epoch_dict['test/episode_score/mean'],2)}")
+        log(f"학습 평균 fail rate: {round(self.epoch_dict['train/fail_rate'],2)}")
         self.epoch_dict.clear()
         self.last_epoch_progress = None
         self.last_epoch_time = time.time()

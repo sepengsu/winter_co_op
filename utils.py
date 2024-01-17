@@ -4,12 +4,16 @@ from deprl import main
 import os
 import re
 from deprl.vendor.tonic.utils import logger
+import re
+import re
 
 def run_training(config:dict,eporchs:int,starts =0):
     print(datetime.datetime.now().strftime("%Y년 %m월 %d일 %H:%M:%S"))
+
     for i in range(starts,starts+eporchs):    
         # trainer set
-        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],i+1) #첫번째에는 2번 epoch 실행하고 다음부터는 하나씩!
+        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],epoch=i+1) #첫번째에는 2번 epoch 실행하고 다음부터는 하나씩!
+
         # Capture the start time
         start_time = time.time()
         
@@ -24,9 +28,7 @@ def run_training(config:dict,eporchs:int,starts =0):
         minutes, seconds = divmod(duration, 60)
         
         print("-" * 30)
-        if i == 0:
-            print(f"Iteration {i+1}은 측정하지 않고 진행합니다.")    
-        print(f"Iteration {i+2}, Duration: {int(minutes)}분 {int(seconds)}초")
+        print(f"Iteration {i+1}, Duration: {int(minutes)}분 {int(seconds)}초")
         print(f"End Time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
         print("-" * 30)
 
@@ -62,11 +64,11 @@ def configmake(config:dict):
                 config['tonic']["name"] = input("이름을 입력하세요")
                 break
             elif sel =="2":
-                config['tonic']["trainer"], config["tonic"]['step_per_epoch'] = _generate_trainer_string(input("ex) 2e5,2e5,2e5").split(","))
+                config['tonic']["trainer"], config["tonic"]['step_per_epoch'] = _generate_trainer_string(input("epoch_steps: ex)2e4"))
                 break
             elif sel =="3":
                 config['tonic']["name"] = input("이름을 입력하세요")
-                config['tonic']["trainer"], config["tonic"]['step_per_epoch'] = _generate_trainer_string(input("ex) 2e5,2e5,2e5").split(","))
+                config['tonic']["trainer"], config["tonic"]['step_per_epoch'] =  _generate_trainer_string(input("epoch_steps: ex)2e4"))
                 break
             else:
                 print("잘못된 입력입니다.")
@@ -74,17 +76,42 @@ def configmake(config:dict):
         else:
             print("잘못입력되어 수정 없이 종료합니다")
             break
+    # config파일 중 trainer에 대하여 2e4등을 int로 바꾸어 저장합니다.
+    config['tonic']['trainer'] = _settings(config['tonic']['trainer'])
     return config    
 
-def _generate_trainer_string(inputs:list):
-        return f"deprl.custom_trainer.Trainer(steps={int(float(inputs[0]))}, epoch_steps={int(float(inputs[1]))}, save_steps={int(float(inputs[2]))})", inputs[0]
+def _generate_trainer_string(inputs:str):
+        inputs = re.sub(" ", "", inputs)
+        return f"deprl.custom_trainer.Trainer(steps={int(float(inputs))}, epoch_steps={int(float(inputs))}, save_steps={int(float(inputs))})", inputs
 
 def _make_trainer_string(trainer:str,steps:str,epoch:int):
-    return trainer.replace(f"steps={int(float(steps))}",f"steps={int(float(steps))*epoch}")
+    before = re.search(r'steps=(.*?)[,\)]', trainer)[0]
+    return trainer.replace(before,f"steps={int(float(steps))*epoch}")
 
 def _step_per_epoch(code:str):
     step_match = re.search(r'steps=(.*?)[,\)]', code)[0]
     return step_match[10:-1]
 
+def _settings(code:str):
+    values = _extract_values(code)
+    for value in values:
+        code = code.replace(value, str(int(float(value))))
+    return code
+
+def _extract_values(string):
+    values = re.findall(r'int\((.*?)\)', string)
+    return values
+
+
 if __name__ == "__main__":
-    print(_generate_trainer_string(input("ex) 2e5,2e5,2e5").split(",")))
+
+    # Example usage
+    string = "deprl.custom_trainer.Trainer(steps=int(4e4), epoch_steps=int(2e4), save_steps=int(2e4))"
+    values = _extract_values(string)
+    string = _settings(string)
+    print(string)
+    i=1+1
+    values = _step_per_epoch(string)
+    print(values)
+    print(_make_trainer_string(string,values,i))
+

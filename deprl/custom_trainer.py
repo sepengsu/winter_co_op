@@ -90,6 +90,7 @@ class Trainer:
                 )
 
             # Check the finished episodes.
+            success = 0
             for i in range(num_workers):
                 if info["resets"][i]:
                     logger.store("train/episode_score", scores[i], stats=True)
@@ -107,7 +108,6 @@ class Trainer:
                     scores[i] = 0
                     lengths[i] = 0
                     episodes += 1
-
 
             # End of the epoch.
             if epoch_steps >= self.epoch_steps:
@@ -153,6 +153,8 @@ class Trainer:
                 logger.store("train/steps", self.steps)
                 logger.store("train/worker_steps", self.steps // num_workers)
                 logger.store("train/steps_per_second", sps)
+                logger.store("train/sussess_rate", success / num_workers)
+                logger.store("train/fail_rate", (num_workers - success) / num_workers)
                 last_epoch_time = time.time()
                 epoch_steps = 0
 
