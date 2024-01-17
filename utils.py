@@ -66,7 +66,7 @@ def configmake(config:dict):
                 print("잘못된 입력입니다.")
                 continue
         else:
-            print("잘못입력되어 종료합니다")
+            print("잘못입력되어 수정 없이 종료합니다")
             break
     return config    
 

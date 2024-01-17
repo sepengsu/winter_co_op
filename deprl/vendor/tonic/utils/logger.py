@@ -52,10 +52,10 @@ def create_resumed_results_path(config, env):
         postfix = f".{env.unwrapped.model.name()}"
     folders = [x for x in os.walk(path)]
     if len(folders) != 0:
-        log("Found earlier run, continuing training.")
         folder = get_sorted_folders(folders[0][1])[-1]
         return os.path.join(path, folder)
     else:
+        log("No earlier run found, starting new training.")
         return (
             os.path.join(path, get_datetime())
             if postfix is None
@@ -166,29 +166,7 @@ class Logger:
                 indent = "  " * len(left_keys)
                 right_key = right_key.replace("_", " ")
                 self.console_formats.append((indent + right_key, key))
-        '''
-        # Display the values following the layout.
-        print()
-        for left, key in self.console_formats:
-            if key:
-                val = self.epoch_dict.get(key)
-                str_type = str(type(val))
-                if "tensorflow" in str_type:
-                    warning(f"Logging TensorFlow tensor {key}")
-                elif "torch" in str_type:
-                    warning(f"Logging Torch tensor {key}")
-                if np.issubdtype(type(val), np.floating):
-                    right = f"{val:8.3g}"
-                elif np.issubdtype(type(val), np.integer):
-                    right = f"{val:,}"
-                else:
-                    right = str(val)
-                spaces = " " * (self.width - len(left) - len(right))
-                print(left + spaces + right)
-            else:
-                spaces = " " * (self.width - len(left))
-                print(left + spaces)
-        print()'''
+
         # display 일부
         log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}")
         log(f"테스트 평균 reward: {round(self.epoch_dict['test/episode_score/mean'],2)}")
@@ -247,26 +225,6 @@ class Logger:
         epoch_steps = (steps - 1) % num_epoch_steps + 1
         epoch_progress = int(self.width * epoch_steps / num_epoch_steps)
         if epoch_progress != self.last_epoch_progress:
-            # current_time = time.time()
-            # seconds = current_time - self.start_time
-            # seconds_per_step = seconds / steps
-            # epoch_rem_steps = num_epoch_steps - epoch_steps
-            # epoch_rem_secs = max(epoch_rem_steps * seconds_per_step, 0)
-            # epoch_rem_secs = datetime.timedelta(seconds=epoch_rem_secs + 1e-6)
-            # epoch_rem_secs = str(epoch_rem_secs)[:-7]
-            # total_rem_steps = num_steps - steps
-            # total_rem_secs = max(total_rem_steps * seconds_per_step, 0)
-            # total_rem_secs = datetime.timedelta(seconds=total_rem_secs)
-            # total_rem_secs = str(total_rem_secs)[:-7]
-            #msg = f"Time left:  epoch {epoch_rem_secs}  total {total_rem_secs}"
-            #msg = msg.center(self.width)
-            #print(
-            #    termcolor.colored(
-            #        "\r" + msg[:epoch_progress], color, on_color
-            #    ),
-            #    end="",
-            #)
-            #print(msg[epoch_progress:], sep="", end="")
             self.last_epoch_progress = epoch_progress
 
 
