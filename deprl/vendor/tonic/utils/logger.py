@@ -93,7 +93,6 @@ class Logger:
                 script_path = os.path.join(self.path, "script.py")
                 with open(script_path, "w") as config_file:
                     config_file.write(script)
-                #log(f"Script file saved to {script_path}")
 
         # Save the configuration.
         if config:
@@ -104,7 +103,6 @@ class Logger:
             config_path = os.path.join(self.path, "config.yaml")
             with open(config_path, "w") as config_file:
                 yaml.dump(config, config_file)
-            #log(f"Config file saved to {config_path}")
 
         self.known_keys = set()
         self.stat_keys = set()
@@ -171,7 +169,6 @@ class Logger:
         vals = [self.epoch_dict.get(key) for key in self.final_keys]
         if new_keys:
             if first_row:
-                #log(f"Logging data to {self.log_file_path}")
                 try:
                     os.makedirs(self.path, exist_ok=True)
                 except Exception:
@@ -205,7 +202,10 @@ class Logger:
                 file.write(",".join(map(str, vals)) + "\n")
 
         # display 일부
-        log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}")
+        if self.epoch_dict['train/fail_rate']==1.0:
+            print("학습 실패!!!!")
+        else:      
+            log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}")
         log(f"테스트 평균 reward: {round(self.epoch_dict['test/episode_score/mean'],2)}")
         log(f"학습 평균 fail rate: {round(self.epoch_dict['train/fail_rate'],2)}")
         self.epoch_dict.clear()

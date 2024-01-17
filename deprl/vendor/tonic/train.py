@@ -32,7 +32,6 @@ def train(
 
     # Process the checkpoint path same way as in tonic.play
     if path:
-        #tonic.logger.log(f"Loading experiment from {path}")
 
         # Use no checkpoint, the agent is freshly created.
         if checkpoint == "none" or agent is not None:

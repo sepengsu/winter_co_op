@@ -151,11 +151,10 @@ def play(path, checkpoint, seed, header, agent, environment):
     checkpoint_path = None
 
     if path:
-        #tonic.logger.log(f"Loading experiment from {path}")
 
         # Use no checkpoint, the agent is freshly created.
         if checkpoint == "none" or agent is not None:
-            #tonic.logger.log("Not loading any weights")
+
             pass
         else:
             checkpoint_path = os.path.join(path, "checkpoints")

@@ -12,7 +12,7 @@ def run_training(config:dict,eporchs:int,starts =0):
 
     for i in range(starts,starts+eporchs):    
         # trainer set
-        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],epoch=i+1) #첫번째에는 2번 epoch 실행하고 다음부터는 하나씩!
+        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],epoch=i+1)
 
         # Capture the start time
         start_time = time.time()
@@ -85,11 +85,16 @@ def _generate_trainer_string(inputs:str):
         return f"deprl.custom_trainer.Trainer(steps={int(float(inputs))}, epoch_steps={int(float(inputs))}, save_steps={int(float(inputs))})", inputs
 
 def _make_trainer_string(trainer:str,steps:str,epoch:int):
-    before = re.search(r'steps=(.*?)[,\)]', trainer)[0]
+    before = re.search(r'steps=(.*?)[,\)]', trainer)[0] 
+    if before[-1] == ",":
+        before = before[:-1]
     return trainer.replace(before,f"steps={int(float(steps))*epoch}")
 
 def _step_per_epoch(code:str):
     step_match = re.search(r'steps=(.*?)[,\)]', code)[0]
+    if step_match[-1] == ",":
+        step_match = step_match[:-1]
+        return step_match[6:]
     return step_match[10:-1]
 
 def _settings(code:str):
@@ -106,7 +111,7 @@ def _extract_values(string):
 if __name__ == "__main__":
 
     # Example usage
-    string = "deprl.custom_trainer.Trainer(steps=int(4e4), epoch_steps=int(2e4), save_steps=int(2e4))"
+    string = "deprl.custom_trainer.Trainer(steps=2000, epoch_steps=int(2e4), save_steps=int(2e4))"
     values = _extract_values(string)
     string = _settings(string)
     print(string)

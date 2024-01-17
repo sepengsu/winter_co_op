@@ -303,7 +303,6 @@ def play(
 ):
     """Reloads an agent and an environment from a previous experiment."""
 
-    #logger.log(f"Loading experiment from {path}")
     # Load config file and checkpoint path from folder
     path, checkpoint, checkpoint_path = get_paths(
         path, checkpoint, checkpoint_file

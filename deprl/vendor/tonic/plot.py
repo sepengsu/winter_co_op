@@ -464,7 +464,6 @@ def plot(
 
     # Save the plot in different formats if needed.
     if save_formats:
-        #logger.log("Saving...")
         if name is None:
             if len(envs) > 1:
                 name = "results"

@@ -26,7 +26,6 @@ class Agent(agents.Agent):
             self.save_buffer(path)
             self.save_observation_normalizer(path)
             self.save_return_normalizer(path)
-        logger.log('Saved')
 
     def get_device(self):
         # support for cpu, cuda and mps
