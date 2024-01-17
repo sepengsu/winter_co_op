@@ -97,6 +97,7 @@ class Trainer:
                     logger.store(
                         "train/episode_length", lengths[i], stats=True
                     )
+                    success +=1
                     if i == 0:
                         # adaptive energy cost
                         if hasattr(self.agent.replay, "action_cost"):

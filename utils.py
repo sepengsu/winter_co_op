@@ -13,9 +13,10 @@ def run_training(config:dict,eporchs:int,starts =0):
     
     print(datetime.datetime.now().strftime("%Y년 %m월 %d일 %H:%M:%S"))
 
-    for i in range(starts,starts+eporchs-1):    
+    for i in range(starts,starts+eporchs):    
         # trainer set
-        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],epoch=i+2)
+        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],epoch=i+1)
+        # print(f"trainer: {config['tonic']['trainer']}")
 
         # Capture the start time
         start_time = time.time()
@@ -31,8 +32,8 @@ def run_training(config:dict,eporchs:int,starts =0):
         minutes, seconds = divmod(duration, 60)
         
         print("-" * 30)
-        if i == 0:
-            print(f"Iteration {i+1}은 초기화 과정으로 생략합니다.")
+        # if i == 0:
+        #     print(f"Iteration {i+1}은 초기화 과정으로 생략합니다.")
         print(f"Iteration {i+1}, Duration: {int(minutes)}분 {int(seconds)}초")
         print(f"End Time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
         print("-" * 30)
@@ -81,19 +82,19 @@ def configmake(config:dict):
         else:
             print("잘못입력되어 수정 없이 종료합니다")
             break
-    # config파일 중 trainer에 대하여 2e4등을 int로 바꾸어 저장합니다.
-    config['tonic']['trainer'] = _settings(config['tonic']['trainer'])
+    # config파일 중 trainer에 대하여 2e4등을 2e4 그대로 저장.
     return config    
 
 def _generate_trainer_string(inputs:str):
         inputs = re.sub(" ", "", inputs)
-        return f"deprl.custom_trainer.Trainer(steps={int(float(inputs))}, epoch_steps={int(float(inputs))}, save_steps={int(float(inputs))})", inputs
+        return f"deprl.custom_trainer.Trainer(steps=int({inputs}), epoch_steps=int({inputs}), save_steps=int({inputs}))", inputs
 
 def _make_trainer_string(trainer:str,steps:str,epoch:int):
-    before = re.search(r'steps=(.*?)[,\)]', trainer)[0] 
+    before = re.search(r'[(]steps=int\(.*?\)', trainer)[0]
     if before[-1] == ",":
         before = before[:-1]
-    return trainer.replace(before,f"steps={int(float(steps))*epoch}")
+    n_steps = _sim(int(float(steps))*(epoch))
+    return trainer.replace(before,f"(steps=int({n_steps})")
 
 def _step_per_epoch(code:str):
     step_match = re.search(r'steps=(.*?)[,\)]', code)[0]
@@ -102,26 +103,25 @@ def _step_per_epoch(code:str):
         return step_match[6:]
     return step_match[10:-1]
 
-def _settings(code:str):
-    values = _extract_values(code)
-    for value in values:
-        code = code.replace(value, str(int(float(value))))
-    return code
+def _sim(number:int):
+    """
+    Converts a number to exponential format without '+' sign and leading zero in the exponent.
+    """
+    # Convert to exponential format
+    exponential_format = "{:.0e}".format(number)
 
-def _extract_values(string):
-    values = re.findall(r'int\((.*?)\)', string)
-    return values
+    # Remove 'e+' and any leading zero in the exponent part
+    simplified_exponential_format = exponential_format.replace("e+0", "e").replace("e+","e")
+    return simplified_exponential_format
 
 
 if __name__ == "__main__":
 
     # Example usage
-    string = "deprl.custom_trainer.Trainer(steps=2000, epoch_steps=int(2e4), save_steps=int(2e4))"
-    values = _extract_values(string)
-    string = _settings(string)
-    print(string)
-    i=1+1
+    string = 'deprl.custom_trainer.Trainer(steps=int(2e4), epoch_steps=int(2e4), save_steps=int(2e4))'
+    string, s = _generate_trainer_string('2e3')
+    print(f'원래: {string}')
+    i=2
     values = _step_per_epoch(string)
-    print(values)
-    print(_make_trainer_string(string,values,i))
+    print(f'나중: {_make_trainer_string(string,values,i)}')
 
