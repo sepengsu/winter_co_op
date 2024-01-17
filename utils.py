@@ -2,9 +2,9 @@ import datetime
 import time
 from deprl import main
 import os
-def run_training(config,eporchs):
+def run_training(config:dict,eporchs:int):
     print(datetime.datetime.now().strftime("%Y년 %m월 %d일 %H:%M:%S"))
-    for i in range(eporchs) :
+    for i in range(eporchs):
         # Set the custom trainer with increasing steps for each iteration
         config['tonic']['trainer'] = f'deprl.custom_trainer.Trainer(steps=int(1e5)*{i+1}, epoch_steps=int(2e4), save_steps=int(2e4))'
         
