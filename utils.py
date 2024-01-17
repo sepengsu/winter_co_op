@@ -5,11 +5,11 @@ import os
 import re
 from deprl.vendor.tonic.utils import logger
 
-def run_training(config:dict,eporchs:int):
+def run_training(config:dict,eporchs:int,starts =0):
     print(datetime.datetime.now().strftime("%Y년 %m월 %d일 %H:%M:%S"))
-    for i in range(eporchs-1):    
+    for i in range(starts,starts+eporchs):    
         # trainer set
-        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],i+2) #첫번째에는 2번 epoch 실행하고 다음부터는  
+        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],i+1) #첫번째에는 2번 epoch 실행하고 다음부터는 하나씩!
         # Capture the start time
         start_time = time.time()
         
