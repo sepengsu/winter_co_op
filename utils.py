@@ -3,6 +3,7 @@ import time
 from deprl import main
 import os
 import re
+from deprl.vendor.tonic.utils import logger
 
 def run_training(config:dict,eporchs:int):
     print(datetime.datetime.now().strftime("%Y년 %m월 %d일 %H:%M:%S"))
@@ -52,24 +53,28 @@ def configmake(config:dict):
         cur =input("설정을 바꾸시겠습니까? (y/n)")
         if cur =="N" or cur =="n":
             break
-        sel = input("어떤 것을 바꾸시겠습니가? 1: 이름만, 2: step만, 3: 모두")
-        if sel =="1":
-            config['tonic']["name"] = input("이름을 입력하세요")
-        elif sel =="2":
-            config['tonic']["trainer"], config["tonic"]['step_per_epoch'] = _generate_trainer_string(input("ex) 2e5,2e5,2e5").split(","))
-        elif sel =="3":
-            config['tonic']["name"] = input("이름을 입력하세요")
-            config['tonic']["trainer"], config["tonic"]['step_per_epoch'] = _generate_trainer_string(input("ex) 2e5,2e5,2e5").split(","))
+        elif cur =="Y" or cur =="y":
+            sel = input("어떤 것을 바꾸시겠습니가? 1: 이름만, 2: step만, 3: 모두")
+            if sel =="1":
+                config['tonic']["name"] = input("이름을 입력하세요")
+            elif sel =="2":
+                config['tonic']["trainer"], config["tonic"]['step_per_epoch'] = _generate_trainer_string(input("ex) 2e5,2e5,2e5").split(","))
+            elif sel =="3":
+                config['tonic']["name"] = input("이름을 입력하세요")
+                config['tonic']["trainer"], config["tonic"]['step_per_epoch'] = _generate_trainer_string(input("ex) 2e5,2e5,2e5").split(","))
+            else:
+                print("잘못된 입력입니다.")
+                continue
         else:
-            print("잘못된 입력입니다.")
-            continue
+            print("잘못입력되어 종료합니다")
+            break
     return config    
 
 def _generate_trainer_string(inputs:list):
         return inputs[0],f"deprl.custom_trainer.Trainer(steps={int(float(inputs[0]))}, epoch_steps={int(float(inputs[1]))}, save_steps={int(float(inputs[2]))})"
 
 def _make_trainer_string(trainer:str,steps:str,epoch:int):
-    return trainer.replace(f"steps={int(steps)}",f"steps={int(steps)*epoch}")
+    return trainer.replace(f"steps={int(float(steps))}",f"steps={int(float(steps))*epoch}")
 
 def _step_per_epoch(code:str):
     step_match = re.search(r'steps=(.*?)[,\)]', code)[0]
