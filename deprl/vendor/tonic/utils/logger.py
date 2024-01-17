@@ -128,6 +128,7 @@ class Logger:
 
         # Compute statistics if needed.
         keys = list(self.epoch_dict.keys())
+        print(keys)
         for key in keys:
             values = self.epoch_dict[key]
             if key in self.stat_keys:
@@ -167,10 +168,6 @@ class Logger:
                 right_key = right_key.replace("_", " ")
                 self.console_formats.append((indent + right_key, key))
 
-        # display 일부
-        log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}")
-        log(f"테스트 평균 reward: {round(self.epoch_dict['test/episode_score/mean'],2)}")
-
         # Save the data to the log file
         vals = [self.epoch_dict.get(key) for key in self.final_keys]
         if new_keys:
@@ -208,6 +205,9 @@ class Logger:
             with open(self.log_file_path, "a") as file:
                 file.write(",".join(map(str, vals)) + "\n")
 
+        # display 일부
+        log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}")
+        log(f"테스트 평균 reward: {round(self.epoch_dict['test/episode_score/mean'],2)}")
         self.epoch_dict.clear()
         self.last_epoch_progress = None
         self.last_epoch_time = time.time()

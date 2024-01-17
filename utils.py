@@ -7,9 +7,9 @@ from deprl.vendor.tonic.utils import logger
 
 def run_training(config:dict,eporchs:int):
     print(datetime.datetime.now().strftime("%Y년 %m월 %d일 %H:%M:%S"))
-    for i in range(eporchs):    
+    for i in range(eporchs-1):    
         # trainer set
-        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],i+1)
+        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],i+2) #첫번째에는 2번 epoch 실행하고 다음부터는  
         # Capture the start time
         start_time = time.time()
         
@@ -23,8 +23,10 @@ def run_training(config:dict,eporchs:int):
         duration = end_time - start_time
         minutes, seconds = divmod(duration, 60)
         
-        print("-" * 30)    
-        print(f"Iteration {i+1}, Duration: {int(minutes)}분 {int(seconds)}초")
+        print("-" * 30)
+        if i == 0:
+            print(f"Iteration {i+1}은 측정하지 않고 진행합니다.")    
+        print(f"Iteration {i+2}, Duration: {int(minutes)}분 {int(seconds)}초")
         print(f"End Time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
         print("-" * 30)
 
@@ -52,6 +54,7 @@ def configmake(config:dict):
     while True:
         cur =input("설정을 바꾸시겠습니까? (y/n)")
         if cur =="N" or cur =="n":
+            print("설정을 바꾸지 않고 종료합니다.")
             break
         elif cur =="Y" or cur =="y":
             sel = input("어떤 것을 바꾸시겠습니가? 1: 이름만, 2: step만, 3: 모두")

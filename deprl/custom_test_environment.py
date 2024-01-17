@@ -127,9 +127,9 @@ def test_scone(env, agent, steps, params=None, test_episodes=10):
     # this creates the rwd_dict
     env.environments[0].custom_reward()
 
-    # eval_rwd_metrics = (
-    #     True if hasattr(env.environments[0], "rwd_dict") else False
-    # )
+    eval_rwd_metrics = (
+        True if hasattr(env.environments[0], "rwd_dict") else False
+    )
     eval_rwd_metrics =False #  metric 없애기
 
     # Test loop.
