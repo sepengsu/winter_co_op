@@ -8,11 +8,14 @@ import re
 import re
 
 def run_training(config:dict,eporchs:int,starts =0):
+    if eporchs <2 or starts <0:
+        raise KeyError("eporchs는 2이상, starts는 0이상의 정수여야 합니다.")
+    
     print(datetime.datetime.now().strftime("%Y년 %m월 %d일 %H:%M:%S"))
 
-    for i in range(starts,starts+eporchs):    
+    for i in range(starts,starts+eporchs-1):    
         # trainer set
-        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],epoch=i+1)
+        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],epoch=i+2)
 
         # Capture the start time
         start_time = time.time()
@@ -28,6 +31,8 @@ def run_training(config:dict,eporchs:int,starts =0):
         minutes, seconds = divmod(duration, 60)
         
         print("-" * 30)
+        if i == 0:
+            print(f"Iteration {i+1}은 초기화 과정으로 생략합니다.")
         print(f"Iteration {i+1}, Duration: {int(minutes)}분 {int(seconds)}초")
         print(f"End Time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
         print("-" * 30)
