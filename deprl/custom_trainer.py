@@ -56,6 +56,7 @@ class Trainer:
         lengths = np.zeros(num_workers, int)
         self.steps, epoch_steps = steps, 0
         steps_since_save = 0
+        success = 0
 
         while True:
             # Select actions.
@@ -90,7 +91,6 @@ class Trainer:
                 )
 
             # Check the finished episodes.
-            success = 0
             for i in range(num_workers):
                 if info["resets"][i]:
                     logger.store("train/episode_score", scores[i], stats=True)
