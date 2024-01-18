@@ -56,7 +56,6 @@ class Trainer:
         lengths = np.zeros(num_workers, int)
         self.steps, epoch_steps = steps, 0
         steps_since_save = 0
-        success = 0
 
         while True:
             # Select actions.
@@ -97,7 +96,6 @@ class Trainer:
                     logger.store(
                         "train/episode_length", lengths[i], stats=True
                     )
-                    success +=1
                     if i == 0:
                         # adaptive energy cost
                         if hasattr(self.agent.replay, "action_cost"):
@@ -142,22 +140,12 @@ class Trainer:
                         _ = test_mujoco(
                             self.test_environment, self.agent, steps, params
                         )
-                #만약에 sucess가 0이면 에피소드가 끝나지 않았다는 것이므로, reward는 0으로 초기화한다.
-                if success == 0:
-                    for i in range(num_workers):
-                        logger.store("train/episode_score", scores[i], stats=True)
-                        logger.store(
-                            "train/episode_length", lengths[i], stats=True
-                        )
-                        
                 # Log the data.
                 epochs += 1
                 logger.store("train/episodes", episodes)
                 logger.store("train/epochs", epochs)
                 logger.store("train/epoch_steps", epoch_steps)
                 logger.store("train/steps", self.steps)
-                logger.store("train/sussess_rate", success / num_workers)
-                logger.store("train/fail_rate", (num_workers - success) / num_workers)
                 logger.store("First", True) if self.max_steps == self.epoch_steps else logger.store("First", False)
                 epoch_steps = 0
 

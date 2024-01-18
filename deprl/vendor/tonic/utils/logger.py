@@ -201,8 +201,6 @@ class Logger:
                 file.write(",".join(map(str, vals)) + "\n")
         
         # display 일부
-        if self.epoch_dict['train/fail_rate']==1.0:
-            warning("주의: 모든 에피소드에서 reset하지 못했습니다")
         if 'train/epsode_score/mean' in self.epoch_dict.keys():
             log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}") 
         elif self.epoch_dict['First']:
