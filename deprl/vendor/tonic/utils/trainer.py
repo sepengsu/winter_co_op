@@ -14,8 +14,8 @@ class Trainer:
         steps=int(1e7),
         epoch_steps=int(2e4),
         save_steps=int(5e5),
-        test_episodes=5,
-        show_progress=True,
+        test_episodes=10,
+        show_progress=False,
         replace_checkpoint=False,
     ):
         self.max_steps = steps
@@ -76,7 +76,6 @@ class Trainer:
                     scores[i] = 0
                     lengths[i] = 0
                     episodes += 1
-
             # End of the epoch.
             if epoch_steps >= self.epoch_steps:
                 # Evaluate the agent on the test environment.
@@ -85,20 +84,13 @@ class Trainer:
 
                 # Log the data.
                 epochs += 1
-                current_time = time.time()
-                # epoch_time = current_time - last_epoch_time
-                # sps = epoch_steps / epoch_time
                 logger.store("train/episodes", episodes)
                 logger.store("train/epochs", epochs)
-                logger.store("train/seconds", current_time - start_time)
-                # logger.store("train/epoch_seconds", epoch_time)
                 logger.store("train/epoch_steps", epoch_steps)
                 logger.store("train/steps", self.steps)
                 logger.store("train/worker_steps", self.steps // num_workers)
-                # logger.store("train/steps_per_second", sps)
-
                 logger.store("First", True) if self.max_steps == self.epoch_steps else logger.store("First", False)
-                
+
                 logger.dump()
                 # last_epoch_time = time.time()
                 epoch_steps = 0
