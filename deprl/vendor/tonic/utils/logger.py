@@ -210,7 +210,6 @@ class Logger:
             error("학습 평균 reward: None")
 
         log(f"테스트 평균 reward: {round(self.epoch_dict['test/episode_score/mean'],2)}")
-        log(f"학습 평균 fail rate: {round(self.epoch_dict['train/fail_rate'],2)}")
         self.epoch_dict.clear()
         self.last_epoch_progress = None
         self.last_epoch_time = time.time()
