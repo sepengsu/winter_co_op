@@ -145,7 +145,7 @@ class Logger:
             first_row = len(self.known_keys) == 0
             if not first_row:
                 print()
-                warning(f"Logging new keys {new_keys}")
+                warning(f"Logging new keys")
             # List the keys and prepare the display layout.
             for key in new_keys:
                 self.known_keys.add(key)
@@ -207,7 +207,7 @@ class Logger:
             log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}") 
         elif self.epoch_dict['First']:
             error("오류발생!!!!")
-            raise Exception("첫번째부터 reward가 없습니다")
+            # raise Exception("첫번째부터 reward가 없습니다")
         else:
             error("학습 평균 reward: None")
 
