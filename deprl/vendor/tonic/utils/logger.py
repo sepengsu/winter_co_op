@@ -201,7 +201,7 @@ class Logger:
                 file.write(",".join(map(str, vals)) + "\n")
         
         # display 일부
-        if 'train/epsode_score/mean' in self.epoch_dict.keys():
+        if 'train/episode_score/mean' in self.epoch_dict.keys():
             log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}") 
         elif self.epoch_dict['First']:
             error("오류발생!!!!")
