@@ -142,7 +142,14 @@ class Trainer:
                         _ = test_mujoco(
                             self.test_environment, self.agent, steps, params
                         )
-
+                #만약에 sucess가 0이면 에피소드가 끝나지 않았다는 것이므로, reward는 0으로 초기화한다.
+                if success == 0:
+                    for i in range(num_workers):
+                        logger.store("train/episode_score", scores[i], stats=True)
+                        logger.store(
+                            "train/episode_length", lengths[i], stats=True
+                        )
+                        
                 # Log the data.
                 epochs += 1
                 current_time = time.time()
