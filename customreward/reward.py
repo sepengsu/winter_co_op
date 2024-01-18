@@ -30,9 +30,9 @@ def rewardfunction(model,head_hody, grf,prev_excs):
 
 
 BALANCE_WEIGHTS = {
-    'diff_position_z':-0.4,
+    'diff_position_z':  0,
     'position_z':-0.2,
-    'velocity_z':-0.4,
+    'velocity_z': 0,
 }
 
 
@@ -41,7 +41,7 @@ def balance_reward(model,head_body,grf,weights = BALANCE_WEIGHTS):
     balance를 위한 각종 함수 
     '''
     balance = MyBalance(weights,model,head_body)   
-    reward = balance.return_reward()
+    reward = balance.return_reward()*3
     return reward    
 
 
