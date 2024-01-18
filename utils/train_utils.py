@@ -1,28 +1,25 @@
 import datetime
 import time
-from deprl import main
+from deprl.main import main
 import os
 import re
-from deprl.vendor.tonic.utils import logger
-import re
-import re
 
-def run_training(config:dict,eporchs:int,starts =0):
-    if eporchs <2 or starts <0:
+def run_training(config:dict,starts =0,epochs = 2):
+    if epochs <2 or starts <0:
         raise KeyError("eporchs는 2이상, starts는 0이상의 정수여야 합니다.")
     
     print(datetime.datetime.now().strftime("%Y년 %m월 %d일 %H:%M:%S"))
 
-    for i in range(starts,starts+eporchs):    
+    for i in range(starts,starts+epochs):    
         # trainer set
         config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],epoch=i+1)
-        # print(f"trainer: {config['tonic']['trainer']}")
+        print(f"trainer: {config['tonic']['trainer']}")
 
         # Capture the start time
         start_time = time.time()
         
         # Start the training process
-        main.main(config)
+        main(config)
         
         # Capture the end time
         end_time = time.time()
@@ -116,10 +113,9 @@ def _sim(number:int):
 
 
 if __name__ == "__main__":
-
     # Example usage
     string = 'deprl.custom_trainer.Trainer(steps=int(2e4), epoch_steps=int(2e4), save_steps=int(2e4))'
-    string, s = _generate_trainer_string('2e3')
+    string, s = _generate_trainer_string('4e5')
     print(f'원래: {string}')
     i=2
     values = _step_per_epoch(string)
