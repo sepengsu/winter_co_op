@@ -88,7 +88,7 @@ def _make_trainer_string(trainer:str,steps:str,epoch:int):
     before = re.search(r'[(]steps=int\(.*?\)', trainer)[0]
     if before[-1] == ",":
         before = before[:-1]
-    n_steps = _sim(int(float(steps))*(epoch))
+    n_steps = f'{int(steps[0])*epoch}{steps[1:]}'
     return trainer.replace(before,f"(steps=int({n_steps})")
 
 def _step_per_epoch(code:str):
@@ -97,17 +97,6 @@ def _step_per_epoch(code:str):
         step_match = step_match[:-1]
         return step_match[6:]
     return step_match[10:-1]
-
-def _sim(number:int):
-    """
-    Converts a number to exponential format without '+' sign and leading zero in the exponent.
-    """
-    # Convert to exponential format
-    exponential_format = "{:.0e}".format(number)
-
-    # Remove 'e+' and any leading zero in the exponent part
-    simplified_exponential_format = exponential_format.replace("e+0", "e").replace("e+","e")
-    return simplified_exponential_format
 
 
 if __name__ == "__main__":
