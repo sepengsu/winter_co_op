@@ -86,18 +86,18 @@ class Trainer:
                 # Log the data.
                 epochs += 1
                 current_time = time.time()
-                epoch_time = current_time - last_epoch_time
-                sps = epoch_steps / epoch_time
+                # epoch_time = current_time - last_epoch_time
+                # sps = epoch_steps / epoch_time
                 logger.store("train/episodes", episodes)
                 logger.store("train/epochs", epochs)
                 logger.store("train/seconds", current_time - start_time)
-                logger.store("train/epoch_seconds", epoch_time)
+                # logger.store("train/epoch_seconds", epoch_time)
                 logger.store("train/epoch_steps", epoch_steps)
                 logger.store("train/steps", self.steps)
                 logger.store("train/worker_steps", self.steps // num_workers)
-                logger.store("train/steps_per_second", sps)
+                # logger.store("train/steps_per_second", sps)
                 logger.dump()
-                last_epoch_time = time.time()
+                # last_epoch_time = time.time()
                 epoch_steps = 0
 
             # End of training.
@@ -105,6 +105,7 @@ class Trainer:
 
             # Save a checkpoint.
             if stop_training or steps_since_save >= self.save_steps:
+                print(f"check,since_save:{steps_since_save}, save_steps:{self.save_steps}, steps:{self.steps},({stop_training},{steps_since_save >= self.save_steps})")
                 path = os.path.join(logger.get_path(), "checkpoints")
                 if os.path.isdir(path) and self.replace_checkpoint:
                     for file in os.listdir(path):

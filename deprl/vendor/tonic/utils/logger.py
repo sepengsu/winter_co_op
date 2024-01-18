@@ -130,7 +130,6 @@ class Logger:
             values = self.epoch_dict[key]
             if key in self.stat_keys and key in ["train/episode_score","test/episode_score"]:
                 self.epoch_dict[key + "/mean"] = np.mean(values)
-                # self.epoch_dict[key + "/std"] = np.std(values)
                 self.epoch_dict[key + "/min"] = np.min(values)
                 self.epoch_dict[key + "/max"] = np.max(values)
                 self.epoch_dict[key + "/size"] = len(values)

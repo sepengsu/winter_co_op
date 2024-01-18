@@ -118,7 +118,7 @@ def train(
         trainer.run(config, **time_dict)
     except Exception as e:
         logger.log(f"trainer failed. Exception: {e}")
-        traceback.print_tb(e.__traceback__)
+        raise e
 
     # Run some code after training.
     if tonic_conf["after_training"]:

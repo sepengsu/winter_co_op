@@ -29,8 +29,6 @@ def run_training(config:dict,starts =0,epochs = 2):
         minutes, seconds = divmod(duration, 60)
         
         print("-" * 30)
-        # if i == 0:
-        #     print(f"Iteration {i+1}은 초기화 과정으로 생략합니다.")
         print(f"Iteration {i+1}, Duration: {int(minutes)}분 {int(seconds)}초")
         print(f"End Time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
         print("-" * 30)
