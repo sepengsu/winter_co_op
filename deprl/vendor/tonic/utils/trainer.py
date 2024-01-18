@@ -96,6 +96,9 @@ class Trainer:
                 logger.store("train/steps", self.steps)
                 logger.store("train/worker_steps", self.steps // num_workers)
                 # logger.store("train/steps_per_second", sps)
+
+                logger.store("First", True) if self.max_steps == self.epoch_steps else logger.store("First", False)
+                
                 logger.dump()
                 # last_epoch_time = time.time()
                 epoch_steps = 0

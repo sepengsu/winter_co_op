@@ -202,11 +202,15 @@ class Logger:
 
         # display 일부
         if self.epoch_dict['train/fail_rate']==1.0:
-            error("학습 실패: 모든 에피소드가 실패했습니다.")
-            error("step수를 늘리거나, 학습 파라미터를 조정해주세요.")
-            # raise Exception("학습 실패")
-        else:      
-            log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}")
+            warning("주의: 모든 에피소드에서 reset하지 못했습니다")
+        if 'train/epsode_score' in self.epoch_dict.keys():
+            log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}") 
+        elif 'test/episode_score' in self.epoch_dict.keys():
+            error("학습 평균 reward: None")
+        else:
+            error("오류발생!!!!")
+            raise Exception("첫번째부터 reward가 없습니다")
+
         log(f"테스트 평균 reward: {round(self.epoch_dict['test/episode_score/mean'],2)}")
         log(f"학습 평균 fail rate: {round(self.epoch_dict['train/fail_rate'],2)}")
         self.epoch_dict.clear()
