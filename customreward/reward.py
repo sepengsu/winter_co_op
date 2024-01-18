@@ -21,10 +21,10 @@ import sconepy
 
 def rewardfunction(model,head_hody, grf,prev_excs):
     '''
-    종합
+    종합 - 일단 balance만 넣어놓음
     '''
-    #reward = balance_reward(model,head_hody,prev_excs)
-    reward =0
+    reward = balance_reward(model,head_hody,prev_excs)
+    # reward =0
     return reward
 
 
