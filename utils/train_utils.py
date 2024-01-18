@@ -13,7 +13,7 @@ def run_training(config:dict,starts =0,epochs = 2):
     for i in range(starts,starts+epochs):    
         # trainer set
         config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],epoch=i+1)
-        print(f"trainer: {config['tonic']['trainer']}")
+        # print(f"trainer: {config['tonic']['trainer']}")
 
         # Capture the start time
         start_time = time.time()

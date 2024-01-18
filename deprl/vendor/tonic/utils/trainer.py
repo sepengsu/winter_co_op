@@ -105,7 +105,7 @@ class Trainer:
 
             # Save a checkpoint.
             if stop_training or steps_since_save >= self.save_steps:
-                print(f"check,since_save:{steps_since_save}, save_steps:{self.save_steps}, steps:{self.steps},({stop_training},{steps_since_save >= self.save_steps})")
+                logger.log(f"check,since_save:{steps_since_save}, save_steps:{self.save_steps}, steps:{self.steps},({stop_training},{steps_since_save >= self.save_steps})")
                 path = os.path.join(logger.get_path(), "checkpoints")
                 if os.path.isdir(path) and self.replace_checkpoint:
                     for file in os.listdir(path):
