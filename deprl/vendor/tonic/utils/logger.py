@@ -204,8 +204,7 @@ class Logger:
         if 'train/episode_score/mean' in self.epoch_dict.keys():
             log(f"학습   평균 reward: {round(self.epoch_dict['train/episode_score/mean'],2)}") 
         elif self.epoch_dict['First']:
-            error("오류발생!!!!")
-            # raise Exception("첫번째부터 reward가 없습니다")
+            error("reward가 없음!!! 오류발생!!!!")
         else:
             error("학습 평균 reward: None")
 
