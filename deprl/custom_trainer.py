@@ -24,7 +24,7 @@ class Trainer:
         epoch_steps=2e4,
         save_steps=5e5,
         test_episodes=20,
-        show_progress=True,
+        show_progress=False,
         replace_checkpoint=False,
     ):
         assert epoch_steps <= save_steps
