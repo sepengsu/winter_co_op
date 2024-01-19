@@ -1,39 +1,13 @@
-import datetime
-import time
-from deprl.main import main
 import os
 import re
 
-def run_training(config:dict,starts =0,epochs = 2):
-    if epochs <2 or starts <0:
-        raise KeyError("eporchs는 2이상, starts는 0이상의 정수여야 합니다.")
-    
-    print(datetime.datetime.now().strftime("%Y년 %m월 %d일 %H:%M:%S"))
-
-    for i in range(starts,starts+epochs):    
-        # trainer set
-        config['tonic']['trainer'] = _make_trainer_string(config['tonic']['trainer'],config['tonic']['step_per_epoch'],epoch=i+1)
-        # print(f"trainer: {config['tonic']['trainer']}")
-
-        # Capture the start time
-        start_time = time.time()
-        
-        # Start the training process
-        main(config)
-        
-        # Capture the end time
-        end_time = time.time()
-        
-        # Calculate and print the duration
-        duration = end_time - start_time
-        minutes, seconds = divmod(duration, 60)
-        
-        print("-" * 30)
-        print(f"Iteration {i+1}, Duration: {int(minutes)}분 {int(seconds)}초")
-        print(f"End Time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
-        print("-" * 30)
-
 def get_directory_path():
+    """
+    사용자의 디렉토리 경로를 반환하는 함수입니다.
+
+    Returns:
+        str: 사용자의 디렉토리 경로
+    """
     dir_path = [
         r"C:\Users\PC\Documents\SCONE\results",
         r"C:\Users\na062\Documents\SCONE\results"
@@ -52,22 +26,37 @@ def get_directory_path():
             print("경로를 다시 입력하세요.")
             continue
 
-def configmake(config:dict):
+def configmake(config:dict, skip_while_loop: bool = False):
+    """
+    주어진 config를 수정하는 함수입니다.
+
+    Parameters:
+        config (dict): 수정할 설정 정보를 담고 있는 딕셔너리
+        skip_while_loop (bool): 수정할지 여부 (기본값: False)
+
+    Returns:
+        dict: 수정된 설정 정보를 담고 있는 딕셔너리
+    """
+    if skip_while_loop:
+        print("설정을 바꾸지 않고 종료합니다.")
+        return config
+    
     config["tonic"]['step_per_epoch'] = _step_per_epoch(config["tonic"]['trainer'])
+    cur = input("설정을 바꾸시겠습니까? (y/n)")
+    if cur.lower() == "n":
+        print("설정을 바꾸지 않고 종료합니다.")
+        return config
+    
     while True:
-        cur =input("설정을 바꾸시겠습니까? (y/n)")
-        if cur =="N" or cur =="n":
-            print("설정을 바꾸지 않고 종료합니다.")
-            break
-        elif cur =="Y" or cur =="y":
+        if cur.lower() == "y":
             sel = input("어떤 것을 바꾸시겠습니가? 1: 이름만, 2: step만, 3: 모두")
-            if sel =="1":
+            if sel == "1":
                 config['tonic']["name"] = input("이름을 입력하세요")
                 break
-            elif sel =="2":
+            elif sel == "2":
                 config['tonic']["trainer"], config["tonic"]['step_per_epoch'] = _generate_trainer_string(input("epoch_steps: ex)2e4"))
                 break
-            elif sel =="3":
+            elif sel == "3":
                 config['tonic']["name"] = input("이름을 입력하세요")
                 config['tonic']["trainer"], config["tonic"]['step_per_epoch'] =  _generate_trainer_string(input("epoch_steps: ex)2e4"))
                 break
@@ -77,14 +66,34 @@ def configmake(config:dict):
         else:
             print("잘못입력되어 수정 없이 종료합니다")
             break
-    # config파일 중 trainer에 대하여 2e4등을 2e4 그대로 저장.
+    
     return config    
 
 def _generate_trainer_string(inputs:str):
-        inputs = re.sub(" ", "", inputs)
-        return f"deprl.custom_trainer.Trainer(steps=int({inputs}), epoch_steps=int({inputs}), save_steps=int({inputs}))", inputs
+    """
+    주어진 입력을 기반으로 Trainer 클래스의 문자열을 생성하는 함수입니다.
+
+    Parameters:
+        inputs (str): epoch_steps 값을 나타내는 문자열
+
+    Returns:
+        tuple: Trainer 클래스의 문자열과 입력값
+    """
+    inputs = re.sub(" ", "", inputs)
+    return f"deprl.custom_trainer.Trainer(steps=int({inputs}), epoch_steps=int({inputs}), save_steps=int({inputs}))", inputs
 
 def _make_trainer_string(trainer:str,steps:str,epoch:int):
+    """
+    주어진 trainer 문자열에서 steps 값을 수정하여 반환하는 함수입니다.
+
+    Parameters:
+        trainer (str): Trainer 클래스의 문자열
+        steps (str): 수정할 steps 값을 나타내는 문자열
+        epoch (int): 현재 에포크 값
+
+    Returns:
+        str: 수정된 trainer 문자열
+    """
     before = re.search(r'[(]steps=int\(.*?\)', trainer)[0]
     if before[-1] == ",":
         before = before[:-1]
@@ -92,12 +101,20 @@ def _make_trainer_string(trainer:str,steps:str,epoch:int):
     return trainer.replace(before,f"(steps=int({n_steps})")
 
 def _step_per_epoch(code:str):
+    """
+    주어진 코드 문자열에서 step_per_epoch 값을 추출하여 반환하는 함수입니다.
+
+    Parameters:
+        code (str): Trainer 클래스의 문자열
+
+    Returns:
+        str: 추출된 step_per_epoch 값
+    """
     step_match = re.search(r'steps=(.*?)[,\)]', code)[0]
     if step_match[-1] == ",":
         step_match = step_match[:-1]
         return step_match[6:]
     return step_match[10:-1]
-
 
 if __name__ == "__main__":
     # Example usage

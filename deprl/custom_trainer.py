@@ -24,7 +24,7 @@ class Trainer:
         epoch_steps=2e4,
         save_steps=5e5,
         test_episodes=20,
-        show_progress=False,
+        show_progress=True,
         replace_checkpoint=False,
     ):
         assert epoch_steps <= save_steps
@@ -70,6 +70,7 @@ class Trainer:
                 observations, self.steps, muscle_states, greedy_episode
             )
             assert not np.isnan(actions.sum())
+            # raise Exception(f'{type(self.environment.environments[0])}')
             logger.store("train/action", actions, stats=True)
 
             # Take a step in the environments.
@@ -83,6 +84,7 @@ class Trainer:
             self.steps += num_workers
             epoch_steps += num_workers
             steps_since_save += num_workers
+
             # Show the progress bar.
             if self.show_progress:
                 logger.show_progress(
@@ -140,17 +142,25 @@ class Trainer:
                         _ = test_mujoco(
                             self.test_environment, self.agent, steps, params
                         )
+
                 # Log the data.
                 epochs += 1
+                current_time = time.time()
+                epoch_time = current_time - last_epoch_time
+                sps = epoch_steps / epoch_time
                 logger.store("train/episodes", episodes)
                 logger.store("train/epochs", epochs)
+                logger.store("train/seconds", current_time - start_time)
+                logger.store("train/epoch_seconds", epoch_time)
                 logger.store("train/epoch_steps", epoch_steps)
                 logger.store("train/steps", self.steps)
-                logger.store("First", True) if self.max_steps == self.epoch_steps else logger.store("First", False)
+                logger.store("train/worker_steps", self.steps // num_workers)
+                logger.store("train/steps_per_second", sps)
+                last_epoch_time = time.time()
                 epoch_steps = 0
 
                 logger.dump()
-                
+
             # End of training.
             stop_training = self.steps >= self.max_steps
 

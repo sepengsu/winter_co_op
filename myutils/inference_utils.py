@@ -59,7 +59,7 @@ def inference(env, policy, num=10, save=True, Max=False):
     print(f'Epis: {maxs + 1},Max_Re:{re_list[maxs]}')
     return (total_pos[maxs] if Max else total_pos, total_vel[maxs] if Max else total_vel)
 
-def plot_3d(com_pos:np.ndarray, com_vel:np.ndarray, Max=False, vector=False, vector_scale=0.1):
+def plot_3d(com_pos:np.ndarray, com_vel:np.ndarray, Max=False, vector=False, vector_scale=0.1, scatter_size=20):
     """
     3D 그래프로 COM 위치와 속도를 플롯하는 함수입니다.
 
@@ -69,6 +69,7 @@ def plot_3d(com_pos:np.ndarray, com_vel:np.ndarray, Max=False, vector=False, vec
     - Max: 최대 보상을 갖는 에피소드의 결과만 플롯할지 여부 (기본값: False)
     - vector: 속도 벡터를 플롯할지 여부 (기본값: False)
     - vector_scale: 속도 벡터의 크기 조정 비율 (기본값: 0.1)
+    - scatter_size: scatter plot의 크기 (기본값: 20)
     """
     fig = plt.figure(figsize=(10,10))
     ax = fig.add_subplot(111, projection='3d')
@@ -77,28 +78,22 @@ def plot_3d(com_pos:np.ndarray, com_vel:np.ndarray, Max=False, vector=False, vec
     if Max:
         points = com_pos
         velocities = com_vel[::20]
-        ax.scatter(points[:,0], points[:,2], points[:,1], color='b')
+        ax.scatter(points[:,0], points[:,2], points[:,1], color='b', s=scatter_size)
         if vector:
             ax.quiver(points[::20,0], points[::20,2], points[::20,1], velocities[:,0], velocities[:,2], velocities[:,1], color='r', length=vector_scale)
-            # Adjust the length of the velocity vectors
-            ax.quiverkey(ax.quiver(points[0,0], points[0,2], points[0,1], velocities[0,0], velocities[0,2], velocities[0,1], color='r', length=vector_scale), 0.9, 0.9, vector_scale, label='Velocity', labelpos='E')
     else:
         colors = cm.rainbow(linspace(0, 1, len(com_pos)))
         for points, velocities, color in zip(com_pos, com_vel[::20], colors):
-            ax.scatter(points[:,0], points[:,2], points[:,1], color=color)
+            ax.scatter(points[:,0], points[:,2], points[:,1], color=color, s=scatter_size)
             if vector:
                 ax.quiver(points[::20,0], points[::20,2], points[::20,1], velocities[:,0], velocities[:,2], velocities[:,1], color=color, length=vector_scale)
-                # Adjust the length of the velocity vectors
-                ax.quiverkey(ax.quiver(points[0,0], points[0,2], points[0,1], velocities[0,0], velocities[0,2], velocities[0,1], color=color, length=vector_scale), 0.9, 0.9, vector_scale, label='Velocity', labelpos='E')
 
     ax.set_xlabel('X')
     ax.set_ylabel('Z')
     ax.set_zlabel('Y')
-
-    plt.title(title)
     plt.show()
 
-def plot_2d(com_pos:np.ndarray, com_vel:np.ndarray, Max=False, vector=False, headlength=10, headwidth=3, headaxislength=4.5):
+def plot_2d(com_pos:np.ndarray, com_vel:np.ndarray, Max=False, vector=False, headlength=10, headwidth=3, headaxislength=4.5, scatter_size=20, vector_step=20):
     """
     2D 그래프로 COM 위치와 속도를 플롯하는 함수입니다.
 
@@ -110,22 +105,24 @@ def plot_2d(com_pos:np.ndarray, com_vel:np.ndarray, Max=False, vector=False, hea
     - headlength: 화살표 머리의 길이 (기본값: 10)
     - headwidth: 화살표 머리의 너비 (기본값: 3)
     - headaxislength: 화살표 머리의 축 길이 (기본값: 4.5)
+    - scatter_size: scatter plot의 크기 (기본값: 20)
+    - vector_step: 속도 벡터를 플롯할 때 사용할 간격 (기본값: 20)
     """
     fig, ax = plt.subplots(figsize=(10,10))
 
     title = "Max Reward's COM" if Max else "All of COM"
     if Max:
         points = com_pos
-        velocities = com_vel[::20]
-        ax.scatter(points[:,0], points[:,2], color='b')
+        velocities = com_vel[::vector_step]
+        ax.scatter(points[:,0], points[:,2], color='b', s=scatter_size)
         if vector:
-            ax.quiver(points[::20,0], points[::20,2], velocities[:,0], velocities[:,2], color='r', headlength=headlength, headwidth=headwidth, headaxislength=headaxislength)
+            ax.quiver(points[::vector_step,0], points[::vector_step,2], velocities[:,0], velocities[:,2], color='r', headlength=headlength, headwidth=headwidth, headaxislength=headaxislength)
     else:
         colors = cm.rainbow(linspace(0, 1, len(com_pos)))
-        for points, velocities, color in zip(com_pos, com_vel[::20], colors):
-            ax.scatter(points[:,0], points[:,2], color=color)
+        for points, velocities, color in zip(com_pos, com_vel[::vector_step], colors):
+            ax.scatter(points[:,0], points[:,2], color=color, s=scatter_size)
             if vector:
-                ax.quiver(points[::20,0], points[::20,2], velocities[:,0], velocities[:,2], color=color, headlength=headlength, headwidth=headwidth, headaxislength=headaxislength)
+                ax.quiver(points[::vector_step,0], points[::vector_step,2], velocities[:,0], velocities[:,2], color=color, headlength=headlength, headwidth=headwidth, headaxislength=headaxislength)
 
     ax.set_xlabel('X')
     ax.set_ylabel('Z')
@@ -137,4 +134,4 @@ if __name__ =="__main__":
     print("test")
     com_pos, com_vel = np.random.rand(10,1000,3), np.random.rand(10,1000,3)
     plot_3d(com_pos[0], com_vel[0],Max=True)
-    plot_2d(com_pos[0], com_vel[0],Max=True, vector=True, vector_scale=30)
+    plot_2d(com_pos[0], com_vel[0],Max=True, vector=True, vector_scale=30, scatter_size=30, vector_step=50)

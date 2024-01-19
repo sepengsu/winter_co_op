@@ -1,3 +1,4 @@
+from deprl.vendor.tonic.utils import normalize_path_decorator
 import datetime
 import os
 import time
@@ -8,39 +9,7 @@ import termcolor
 import torch
 import yaml
 
-from deprl.vendor.tonic.utils import normalize_path_decorator
-
 current_logger = None
-
-
-def get_sorted_folders(folders):
-    def get_datetime_key(s):
-        date_time_str = s.split(".")[0] + s.split(".")[1]
-        try:
-            # Assuming date_time_str is in the format "YYMMDDHHMMSS"
-            dt = time.strptime(date_time_str, "%y%m%d%H%M%S")
-            return dt
-        except ValueError:
-            return None
-
-    # Sort the strings using the custom sorting key
-    sorted_folders = sorted(folders, key=get_datetime_key)
-    return sorted_folders
-
-
-@normalize_path_decorator
-def create_results_path(config, env):
-    if env is None or env.results_dir is None:
-        return os.path.join(
-            config["working_dir"], config["tonic"]["name"], get_datetime()
-        )
-    # Scone experiments are saved in results_dir
-    return os.path.join(
-        env.results_dir,
-        config["tonic"]["name"],
-        get_datetime() + f".{env.unwrapped.model.name()}",
-    )
-
 
 @normalize_path_decorator
 def create_resumed_results_path(config, env):
@@ -55,17 +24,40 @@ def create_resumed_results_path(config, env):
         folder = get_sorted_folders(folders[0][1])[-1]
         return os.path.join(path, folder)
     else:
-        log("No earlier run found, starting new training.")
+        log("starting new training.")
         return (
             os.path.join(path, get_datetime())
             if postfix is None
             else os.path.join(path, get_datetime() + postfix)
         )
+def get_sorted_folders(folders):
+    def get_datetime_key(s):
+        date_time_str = s.split(".")[0] + s.split(".")[1]
+        try:
+            # Assuming date_time_str is in the format "YYMMDDHHMMSS"
+            dt = time.strptime(date_time_str, "%y%m%d%H%M%S")
+            return dt
+        except ValueError:
+            return None
 
+    # Sort the strings using the custom sorting key
+    sorted_folders = sorted(folders, key=get_datetime_key)
+    return sorted_folders
 
-class Logger:
-    """Logger used to display and save logs, and save experiment configs."""
+@normalize_path_decorator
+def create_results_path(config, env):
+    if env is None or env.results_dir is None:
+        return os.path.join(
+            config["working_dir"], config["tonic"]["name"], get_datetime()
+        )
+    # Scone experiments are saved in results_dir
+    return os.path.join(
+        env.results_dir,
+        config["tonic"]["name"],
+        get_datetime() + f".{env.unwrapped.model.name()}",
+    )
 
+class MyLogger:
     def __init__(
         self,
         width=60,
@@ -84,7 +76,7 @@ class Logger:
 
         # Save the launch script.
         if script_path:
-            with open(script_path, "r") as script_file:
+            with open(script_path, "r", encoding = 'utf-8' or 'cp949') as script_file:
                 script = script_file.read()
                 try:
                     os.makedirs(self.path, exist_ok=True)
@@ -121,6 +113,7 @@ class Logger:
         else:
             self.epoch_dict[key].append(value)
 
+    
     def dump(self):
         """Displays and saves the values at the end of an epoch."""
 
@@ -144,7 +137,6 @@ class Logger:
         if new_keys:
             first_row = len(self.known_keys) == 0
             if not first_row:
-                print()
                 warning(f"Logging new keys")
             # List the keys and prepare the display layout.
             for key in new_keys:
@@ -213,66 +205,98 @@ class Logger:
         self.last_epoch_progress = None
         self.last_epoch_time = time.time()
 
-    def show_progress(
-        self,
-        steps,
-        num_epoch_steps,
-        num_steps,
-        color="white",
-        on_color="on_blue",
-    ):
-        """Shows a progress bar for the current epoch and total training."""
-
-        epoch_steps = (steps - 1) % num_epoch_steps + 1
-        epoch_progress = int(self.width * epoch_steps / num_epoch_steps)
-        if epoch_progress != self.last_epoch_progress:
-            self.last_epoch_progress = epoch_progress
-
-
+# 여기는 참조하여 수정함
 def initialize(*args, **kwargs):
     global current_logger
-    current_logger = Logger(*args, **kwargs)
+    current_logger = MyLogger(*args, **kwargs)
     return current_logger
-
 
 def get_current_logger():
     global current_logger
     if current_logger is None:
-        current_logger = Logger()
+        current_logger = MyLogger()
     return current_logger
-
 
 def store(*args, **kwargs):
     logger = get_current_logger()
     return logger.store(*args, **kwargs)
 
-
 def dump(*args, **kwargs):
     logger = get_current_logger()
     return logger.dump(*args, **kwargs)
-
 
 def show_progress(*args, **kwargs):
     logger = get_current_logger()
     return logger.show_progress(*args, **kwargs)
 
+def get_path():
+    logger = get_current_logger()
+    return logger.path
+
+def log(msg, color="green"):
+    print(termcolor.colored(msg, color, attrs=["bold"]))
+
+def warning(msg, color="yellow"):
+    print(termcolor.colored("Warning: " + msg, color, attrs=["bold"]))
+
+def error(msg, color="red"):
+    print(termcolor.colored("Error: " + msg, color, attrs=["bold"]))
+
+def save(path):
+    logger = get_current_logger()
+    return logger.save(path)
+
+def load(path, time_dict):
+    logger = get_current_logger()
+    return logger.load(path, time_dict)
+
+def filter_csv_by_steps(csv_file, threshold):
+    logger = get_current_logger()
+    return logger.filter_csv_by_steps(csv_file, threshold)
+
+def create_path(path, post_fix):
+    logger = get_current_logger()
+    return logger.create_path(path, post_fix)
+
+def get_datetime():
+    # Get the current date and time
+    return datetime.datetime.now()
+
+def initialize(*args, **kwargs):
+    global current_logger
+    current_logger = MyLogger(*args, **kwargs)
+    return current_logger
+
+def get_current_logger():
+    global current_logger
+    if current_logger is None:
+        current_logger = MyLogger()
+    return current_logger
+
+def store(*args, **kwargs):
+    logger = get_current_logger()
+    return logger.store(*args, **kwargs)
+
+def dump(*args, **kwargs):
+    logger = get_current_logger()
+    return logger.dump(*args, **kwargs)
+
+def show_progress(*args, **kwargs):
+    logger = get_current_logger()
+    return logger.show_progress(*args, **kwargs)
 
 def get_path():
     logger = get_current_logger()
     return logger.path
 
-
 def log(msg, color="green"):
     print(termcolor.colored(msg, color, attrs=["bold"]))
-
 
 def warning(msg, color="yellow"):
     print(termcolor.colored("Warning: " + msg, color, attrs=["bold"]))
 
-
 def error(msg, color="red"):
     print(termcolor.colored("Error: " + msg, color, attrs=["bold"]))
-
 
 def save(path):
     logger = get_current_logger()
@@ -285,7 +309,6 @@ def save(path):
     log_path = create_path(path, "logger")
     torch.save(log_dict, log_path)
 
-
 def load(path, time_dict):
     logger = get_current_logger()
     log_path = create_path(path, "logger")
@@ -293,7 +316,6 @@ def load(path, time_dict):
     for k, v in log_dict.items():
         setattr(logger, k, v)
     filter_csv_by_steps(logger.log_file_path, time_dict["steps"])
-
 
 def filter_csv_by_steps(csv_file, threshold):
     try:
@@ -314,10 +336,8 @@ def filter_csv_by_steps(csv_file, threshold):
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
-
 def create_path(path, post_fix):
     return path.split("step")[0] + post_fix + ".pt"
-
 
 def get_datetime():
     # Get the current date and time
@@ -325,3 +345,13 @@ def get_datetime():
     # Format the date and time as "YYMMDD.HHMMSS"
     formatted_datetime = now.strftime("%y%m%d.%H%M%S")
     return formatted_datetime
+
+def timeprinting(epoch,start_time, end_time):
+     # Calculate and print the duration
+    duration = end_time - start_time
+    minutes, seconds = divmod(duration, 60)
+    
+    print("-" * 30)
+    print(f"Epoch: {epoch}, Duration: {int(minutes)}분 {int(seconds)}초")
+    print(f"End Time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end_time))}")
+    print("-" * 30)
