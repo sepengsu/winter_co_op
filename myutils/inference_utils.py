@@ -23,7 +23,7 @@ def inference(env, policy, num=10, save=True, Max=False,more=False, **kwargs):
     re_list = []
     total_pos = np.zeros((num, 1000, 3))  # 에피소드 *걸음수*(x,y,z)
     total_vel = np.zeros((num, 1000, 3))  # 에피소드 *걸음수*(x,y,z) for velocity
-    more_reward =_make_dict(kwargs) if more else None
+    more_reward =_make_dict(**kwargs) if more else None
 
     for ep in range(num):
         ep_steps = 0
