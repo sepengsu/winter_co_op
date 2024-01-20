@@ -57,7 +57,7 @@ def inference(env, policy, num=10, save=True, Max=False,more=False, **kwargs):
                      f"{Epis}steps={ep_steps}; reward={ep_tot_reward:0.3f}, com={env.model.com_pos()}"
                 )
                 if more:
-                    string = ''*len(Epis)
+                    string = ' '*len(Epis)
                     for key in more_reward:
                         string += f'{key}:{round(more_reward[key],2)}; '
                     print(string)
