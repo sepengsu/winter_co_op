@@ -2,8 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from numpy import linspace
+from metrics import reward_function
+from .utils import _make_dict
 
-def inference(env, policy, num=10, save=True, Max=False):
+def inference(env, policy, num=10, save=True, Max=False,more=False, **kwargs):
     """
     주어진 환경과 정책을 사용하여 추론을 수행하는 함수입니다.
 
@@ -21,11 +23,14 @@ def inference(env, policy, num=10, save=True, Max=False):
     re_list = []
     total_pos = np.zeros((num, 1000, 3))  # 에피소드 *걸음수*(x,y,z)
     total_vel = np.zeros((num, 1000, 3))  # 에피소드 *걸음수*(x,y,z) for velocity
+    more_reward =_make_dict(kwargs) if more else None
+
     for ep in range(num):
         ep_steps = 0
         ep_tot_reward = 0
         ep_com = np.zeros((1000, 3))
         ep_vel = np.zeros((1000, 3))  # for velocity
+        
         state = env.reset()
         if save:
             env.store_next_episode()
@@ -38,15 +43,26 @@ def inference(env, policy, num=10, save=True, Max=False):
             action = policy(state)
             # applies action and advances environment by one step
             state, reward, done, info = env.step(action)
+            if more:
+                temp = reward_function(env.model, env.head_body, **kwargs)
+                for key in more_reward:
+                    more_reward[key] += temp[key]
             ep_steps += 1
             ep_tot_reward += reward
 
             # check if done
             if done or (ep_steps >= 1000):
+                
                 print(
                     f"Episode {ep} ending; steps={ep_steps}; reward={ep_tot_reward:0.3f}; \
                     com={env.model.com_pos()}"
                 )
+                if more:
+                    string = ''
+                    for key in more_reward:
+                        string += f'{key}:{more_reward[key]}; '
+                    print(string, end='')
+
                 if save:
                     env.write_now()
                 env.reset()

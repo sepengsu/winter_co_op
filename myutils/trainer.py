@@ -50,9 +50,7 @@ class MyTrainer(Trainer):
         while True:
             # Select actions.
                 if hasattr(self.agent, "expl"):
-                    greedy_episode = (
-                        not episodes % self.agent.expl.test_episode_every
-                    )
+                    greedy_episode = (not episodes % self.agent.expl.test_episode_every)
                 else:
                     greedy_episode = None
                 assert not np.isnan(observations.sum())
