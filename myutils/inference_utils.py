@@ -55,13 +55,13 @@ def inference(env, policy, num=10, save=True, Max=False,more=False, **kwargs):
                 
                 print(
                     f"Episode {ep} ending; steps={ep_steps}; reward={ep_tot_reward:0.3f}; \
-                    com={env.model.com_pos()}"
+                    com={env.model.com_pos()}", end=', '
                 )
                 if more:
                     string = ''
                     for key in more_reward:
-                        string += f'{key}:{more_reward[key]}; '
-                    print(string, end='')
+                        string += f'{key}:{round(more_reward[key],2)}; '
+                    print(string)
 
                 if save:
                     env.write_now()
