@@ -1,6 +1,6 @@
 from deprl.main import set_tensor_device
 from myutils import logger
-from myutils.trainer import MyTrainer as Trainer
+from myutils.trainer import MyTrainer 
 from deprl import custom_distributed
 from deprl.utils import load_checkpoint
 import torch
