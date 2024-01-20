@@ -41,7 +41,7 @@ def balance_reward(model,head_body,grf,weights = BALANCE_WEIGHTS):
     balance를 위한 각종 함수 
     '''
     balance = MyBalance(weights,model,head_body)   
-    reward = balance.return_reward()*3
+    reward = balance.return_reward()*0
     return reward    
 
 
