@@ -17,13 +17,9 @@ def _make_dict(**kwargs):
         {'head_position': 0}
     """
     Dict = dict()
-    for key in kwargs:
-        if key == 'reward_type':
-            reward_type = kwargs[key]
-        elif key == 'types':
-            types = kwargs[key]
-        else:
-            raise ValueError(f'Unknown argument: {key}')
+    reward_type = kwargs.get('reward_type')
+    types = kwargs.get('types')
+    
     if reward_type == 'position':
         if types == 'head':
             Dict['head_position'] = 0
@@ -61,3 +57,7 @@ def _make_dict(**kwargs):
     else:
         raise ValueError(f'Unknown argument: {reward_type}')
     return Dict
+
+def _sum_weight_and_rwd(weights:dict,rwd_dict:dict):
+    '''이 함수는 weight x reward를 계산하는 함수이다.'''
+    return sum(weights[key] * rwd_dict[key] for key in weights if key in rwd_dict)      

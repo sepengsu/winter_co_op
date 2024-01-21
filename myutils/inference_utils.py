@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from numpy import linspace
 from metrics import reward_function
-from .utils import _make_dict
+from .kwargs_utils import _make_dict
 
 def inference(env, policy, num=10, save=True, Max=False,more=False, **kwargs):
     """

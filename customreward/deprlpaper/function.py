@@ -22,13 +22,52 @@ PARA={
     "labmda": 0.9# decay term
 }
 
-def total_reward(model, head_body,prev_excs,parameters = PARA):
+def totalreward(model, head_body,prev_excs,parameters = PARA,**kwargs):
     '''
     논문참조 : https://arxiv.org/pdf/2309.02976.pdf
     https://sites.google.com/view/naturalwalkingrl
     Sconegym에 구현되어 있음 - 그대로 사용 
 
+    keyward arguments:
+    model: env.model
+    head_body: env.head_body
+    prev_excs: env.prev_excs
+    parameters: parameter dictionary
+    ** kwargs:
+        deprlpaper_w1: w1 - action smoothing
+        deprlpaper_w2: w2 - number of active muscles above 15% activity
+        deprlpaper_w3: w3 - joint limit torque
+        deprlpaper_w4: w4 - GRFs above 1.2 BW
+        deprlpaper_delta_alpha: delta_alpha - change in adaptation rate
+        deprlpaper_theta: theta - performance threshold
+        deprlpaper_beta: beta - running avg. smoothing
+        deprlpaper_labmda: labmda - decay term
     '''
+    w1 = kwargs.get('deprlpaper_w1',False)
+    w2 = kwargs.get('deprlpaper_w2',False)
+    w3 = kwargs.get('deprlpaper_w3',False)
+    w4 = kwargs.get('deprlpaper_w4',False)
+    delta_alpha = kwargs.get('deprlpaper_delta_alpha',False)
+    theta = kwargs.get('deprlpaper_theta',False)
+    beta = kwargs.get('deprlpaper_beta',False)
+    labmda = kwargs.get('deprlpaper_labmda',False)
+    if w1:
+        parameters['w1'] = w1
+    if w2:
+        parameters['w2'] = w2
+    if w3:
+        parameters['w3'] = w3
+    if w4:
+        parameters['w4'] = w4
+    if delta_alpha:
+        parameters['delta_alpha'] = delta_alpha
+    if theta:
+        parameters['theta'] = theta
+    if beta:
+        parameters['beta'] = beta
+    if labmda:
+        parameters['labmda'] = labmda
+    
     r = r_vel(model) - c_effort(model,head_body,prev_excs,parameters['w1'],parameters['w2'],parameters) - c_pain(model,model.bodies(),parameters['w3'],parameters['w4'])
 
     return r

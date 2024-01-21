@@ -12,6 +12,13 @@ elif sys.platform.startswith('darwin'):
 
 import sconepy
 
+BALANCE_WEIGHTS = {
+    'diff_position_z':  0,
+    'position_z':-1,
+    'velocity_z': 0,
+}
+from myutils.kwargs_utils import _sum_weight_and_rwd
+
 class MyBalance():
         def __init__(self,weight_dict,model,head_body):
             self.weight_dict = weight_dict
@@ -44,6 +51,33 @@ class MyBalance():
             
             return _sum_weight_and_rwd(self.weight_dict,self.rwd_dict)
 
-def _sum_weight_and_rwd(weights:dict,rwd_dict:dict):
-    '''이 함수는 weight x reward를 계산하는 함수이다.'''
-    return sum(weights[key] * rwd_dict[key] for key in weights if key in rwd_dict)      
+def totalreward(model,head_body,grf,prev_excs,weight = BALANCE_WEIGHTS, **kwargs):
+    '''
+    model: env.model
+    head_body: env.head_body
+    grf: env.grf
+    prev_excs: env.prev_excs
+    weight: weight dictionary
+    -> weight를 변경하기 위해서는 아래의 파라미터를 설정해야함
+    kwargs: 
+        - balance_position_z : position_z
+        - balance_diff_position_z: diff_position_z
+        - balance_velocity_z: velocity_z
+
+    return: reward
+    '''
+    #change weight
+    position_z = kwargs.get('balance_position_z',False)
+    diff_position_z = kwargs.get('balance_diff_position_z',False)
+    velocity_z = kwargs.get('balance_velocity_z',False)
+    if position_z:
+        weight['position_z'] = position_z
+    if diff_position_z:
+        weight['diff_position_z'] = diff_position_z
+    if velocity_z:
+        weight['velocity_z'] = velocity_z
+
+    #calculate reward
+    balance = MyBalance(weight,model,head_body)
+    return balance.return_reward()
+

@@ -1,1 +1,1 @@
-from .function import total_reward
+from .function import totalreward

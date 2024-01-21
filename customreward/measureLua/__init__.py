@@ -5,3 +5,4 @@ from .gaitmeasure import gait_measure
 from .grfdetla import derivative_grf
 from .grfdetla import vector_scale
 from .limitforce import Knee_limit_force, ankle_angle
+from .function import totalreward

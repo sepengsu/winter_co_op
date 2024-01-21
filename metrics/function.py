@@ -1,6 +1,6 @@
 
 from . import z
-from myutils.utils import _make_dict
+from myutils.kwargs_utils import _make_dict
 
 def reward_function(model, head_body, **kwargs):
     """
