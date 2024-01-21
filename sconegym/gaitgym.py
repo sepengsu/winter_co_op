@@ -17,7 +17,7 @@ elif sys.platform.startswith('darwin'):
 
 sys.path.append(r'C:\Users\na062\Desktop\winter_co_op\IQL\customreward') # 수정 예정 -> os 활용
 
-from customreward import reward as creward
+from customreward import rewardfunction
 from customreward import GRFBefore
 
 import sconepy
@@ -386,13 +386,16 @@ class GaitGym(SconeGym):
         self.total_steps += 1
         self.steps += 1
         return self.custom_reward() +self.reward_total()
-
+    
+    def setting(self,coeff_dict):
+        self.coeff_dict = coeff_dict
+        
     def custom_reward(self):
         self._update_rwd_dict()
         return np.sum(list(self.rwd_dict.values())) # 이게 reward
     
     def reward_total(self):
-        return creward.rewardfunction(self.model,self.head_body,self.grf,self.prev_excs)
+        return rewardfunction(self.model,self.head_body,self.grf,self.prev_excs,**self.coeff_dict)
 
     def _update_rwd_dict(self):
         self.rwd_dict = {

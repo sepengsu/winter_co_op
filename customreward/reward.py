@@ -1,8 +1,12 @@
 import numpy as np
-import customreward
+import os
+# Get the path of the current directory
+_current_dir = os.path.dirname(__file__)
 
+# Get the names of all subdirectories in the current directory
+all_names = [name.split('\\')[-1] for name in os.listdir(_current_dir) if os.path.isdir(os.path.join(_current_dir, name)) and not name.startswith('__')]
 
-_dict_name = customreward.all_names
+_dict_name = all_names
 DEFAULT_WEIGHTS  = dict(zip(_dict_name,np.zeros(len(_dict_name))))
 DEFAULT_WEIGHTS['balance'] = 1
 
@@ -28,7 +32,7 @@ def rewardfunction(model,head_hody, grf,prev_excs,type_weights = DEFAULT_WEIGHTS
        exec(string)
 
     return _sum_weight_and_rwd(type_weights,Dict)
- 
+     
 def _sum_weight_and_rwd(weights:dict,rwd_dict:dict):
     '''이 함수는 weight x reward를 계산하는 함수이다.'''
     return sum(weights[key] * rwd_dict[key] for key in weights if key in rwd_dict)
