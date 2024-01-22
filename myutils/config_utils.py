@@ -101,7 +101,7 @@ def make_weight_dict(config,is_weight = False):
         if is_weight == 'n':
             is_weight = False
             
-    config['reward_weight'] = weight_dict
+    config['tonic']['reward_weight'] = weight_dict
     return config
 
 
