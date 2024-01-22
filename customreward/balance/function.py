@@ -50,7 +50,7 @@ class MyBalance():
                 self.rwd_dict[name] = getattr(self,name)()
             
             return _sum_weight_and_rwd(self.weight_dict,self.rwd_dict)
-
+        
 def totalreward(model,head_body,grf,prev_excs,weight = BALANCE_WEIGHTS, **kwargs):
     '''
     model: env.model

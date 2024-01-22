@@ -21,7 +21,6 @@ PARA={
     "beta" : 0.8,# running avg. smoothing
     "labmda": 0.9# decay term
 }
-
 def totalreward(model, head_body,prev_excs,parameters = PARA,**kwargs):
     '''
     논문참조 : https://arxiv.org/pdf/2309.02976.pdf

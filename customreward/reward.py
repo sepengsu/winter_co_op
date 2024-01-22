@@ -9,7 +9,8 @@ all_names = [name.split('\\')[-1] for name in os.listdir(_current_dir) if os.pat
 _dict_name = all_names
 DEFAULT_WEIGHTS  = dict(zip(_dict_name,np.zeros(len(_dict_name))))
 DEFAULT_WEIGHTS['balance'] = 1
-
+DEFAULT_WEIGHTS['deprlpaper'] = 0
+DEFAULT_WEIGHTS['measureLua'] = 0
 
 def rewardfunction(model,head_hody, grf,prev_excs,type_weights = DEFAULT_WEIGHTS,**kwargs):
     '''
