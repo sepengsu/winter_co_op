@@ -185,8 +185,7 @@ class Parallel:
             )
             self.processes[-1].daemon = True
             self.processes[-1].start()
-        return self.action_pipes
-
+            
     def start(self):
         """Used once to get the initial observations."""
         assert not self.started
