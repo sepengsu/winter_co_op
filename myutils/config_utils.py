@@ -75,7 +75,7 @@ def make_weight_dict(config,is_weight = False):
     input 함수를 통해 reward_type, weight_name, weight를 입력받아 reward_weight를 만듭니다.
 
     Guide:
-        reward_type, weight_name, weight를 입력받아 reward_weight를 만듭니다.
+        reward_type, weight_name, weight를 입력받아 reward_weight를 만듭니다.        
         reward_type, weight_name은 문자열이며, weight는 실수입니다.
         key를 input 할 때에는 reward_type , weight_name 이렇게 쓰세요.
         weight는 실수로 입력하세요.

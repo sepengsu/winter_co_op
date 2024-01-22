@@ -1,4 +1,3 @@
 
-
-def simplegrf(model):
+def grfdetla():
     pass
