@@ -1,7 +1,7 @@
 from . import measureLua
 from .measureLua.grfdetla import GRFBefore
 from . import deprlpaper
-from .reward import rewardfunction
+from .reward import rewardfunction, showingweight, settingrewardweight, settingtypeweight
 import os
 
 
@@ -10,7 +10,10 @@ __all__ = [
     GRFBefore,
     deprlpaper,
     rewardfunction,
-    reward
+    reward,
+    showingweight,
+    settingrewardweight,
+    settingtypeweight
 ]
 
 

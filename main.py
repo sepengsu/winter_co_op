@@ -5,16 +5,17 @@ from myutils import custom_distributed
 from deprl.utils import load_checkpoint
 import torch
 import os
+from customreward import showingweight, settingrewardweight, settingtypeweight
 
-def main(config):
+def main(config,setting = False):
     if "cpu_override" in config["tonic"] and config["tonic"]["cpu_override"]:
         torch.set_default_device("cpu")
         logger.log("Manually forcing CPU run.")
     else:
         set_tensor_device()
-        train(config)
+        train(config,setting = setting)
 
-def train(config):
+def train(config,setting = False):
     """
     Trains an agent on an environment. : 라이브러리 참조 
     """
@@ -28,6 +29,11 @@ def train(config):
     if "env_args" not in config or config["env_args"] is None:
         config["env_args"] = {}
 
+    # set weight    
+    settingtypeweight(tonic_conf['type_weight'],setting=setting)
+    settingrewardweight(reward_weights = tonic_conf['reward_weight'],setting =setting)
+    #showingweight()
+
     # Build the training environment.
     _environment = tonic_conf["environment"]
     environment = custom_distributed.distribute(
@@ -36,7 +42,7 @@ def train(config):
         env_args=config["env_args"],
     )
     environment.initialize(seed=tonic_conf["seed"])
-    
+
 
     # Build the testing environment.
     _test_environment = (
