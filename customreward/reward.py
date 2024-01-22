@@ -1,5 +1,6 @@
 import numpy as np
 import os
+import pandas as pd
 # Get the path of the current directory
 _current_dir = os.path.dirname(__file__)
 
@@ -33,6 +34,12 @@ def rewardfunction(model,head_hody, grf,prev_excs,type_weights = DEFAULT_WEIGHTS
        exec(string)
 
     return _sum_weight_and_rwd(type_weights,Dict)
+
+def showingweight(type_weights = DEFAULT_WEIGHTS,**kwargs):
+    '''weight를 보여주는 함수'''
+    print("type_weight를 보여줍니다.")
+    print(pd.DataFrame(type_weights))
+    print(pd.DataFrame(**kwargs))
      
 def _sum_weight_and_rwd(weights:dict,rwd_dict:dict):
     '''이 함수는 weight x reward를 계산하는 함수이다.'''
