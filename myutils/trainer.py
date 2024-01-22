@@ -25,8 +25,9 @@ class MyTrainer(Trainer):
     def initialize(self, agent, environment, test_environment=None, full_save=False):
         return super().initialize(agent, environment, test_environment, full_save)
     
-    def temp(self):
-        print(type(self.environment),type(self.test_environment))
+    def setting(self, reward_weight):
+        self.environment.setting(reward_weight)
+        self.test_environment.setting(reward_weight)
 
     def run(self, params, steps=0, epochs=0, episodes=0):
         """Runs the main training loop."""

@@ -59,7 +59,7 @@ def distribute(
 
     dummy_environment = build_env_from_dict(build_dict)
     max_episode_steps = dummy_environment._max_episode_steps
-    del dummy_environment
+    del dummy_environmentd
 
     if parallel < 2:
         return MySequential(
