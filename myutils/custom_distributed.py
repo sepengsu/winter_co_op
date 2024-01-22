@@ -7,16 +7,14 @@ class MySequential(Sequential):
         super().__init__(*args, **kwargs)
 
     def setting(self, coeff_dict):
-        for environment in self.environments:
-            environment.setting(coeff_dict)
+        self.coeff_dict = coeff_dict
 
 class MyParallel(Parallel): 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def setting(self, coeff_dict):
-        for environment in self.environments:
-            environment.setting(coeff_dict)
+        self.coeff_dict = coeff_dict
 
 
 # 이 코드는 deprl/custom_distributed.py 에서 가져옴

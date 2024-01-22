@@ -36,7 +36,7 @@ def train(config):
         env_args=config["env_args"],
     )
     environment.initialize(seed=tonic_conf["seed"])
-    environment.setting(tonic_conf['reward_weight']) # setting reward weight
+    
 
     # Build the testing environment.
     _test_environment = (
