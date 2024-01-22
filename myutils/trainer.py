@@ -16,7 +16,7 @@ from deprl.custom_test_environment import (
 
 class MyTrainer(Trainer):
     '''
-    내가 직접 만든 Trainer deprl에서 수정함
+    내가 직접 만든 Trainer deprl에서 수정함te
 
     '''
     def __init__(self, steps=10000000, epoch_steps=20000, save_steps=500000, test_episodes=20, show_progress=False, replace_checkpoint=False):
