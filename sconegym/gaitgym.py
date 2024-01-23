@@ -283,7 +283,7 @@ class SconeGym(gym.Env, ABC):
 
 
 class GaitGym(SconeGym):
-    def __init__(self, model_file,rwd_type_weights = dict(),rwd_weights=dict(), *args, **kwargs):
+    def __init__(self, model_file,rwd_type_weights ='',rwd_weights='', *args, **kwargs):
         self._max_episode_steps = 10000
         super().__init__(model_file, *args, **kwargs)
         self.rwd_dict = None
@@ -292,8 +292,8 @@ class GaitGym(SconeGym):
         # delta 생성을 위한 객체 생성
         self.grf =GRFBefore(self.model) # 빈 객체 생성 
         self.grf.initialize()
-        self.rwd_type_weights = rwd_type_weights
-        self.rwd_weights = rwd_weights
+        self.rwd_type_weights = eval(rwd_type_weights) if len(rwd_type_weights)>0 else None
+        self.rwd_weights = eval(rwd_weights) if len(rwd_weights)>0 else None
 
     def output_dir(self, dir_name):
         self.output_dir = sconepy.replace_string_tags(dir_name)
@@ -403,7 +403,9 @@ class GaitGym(SconeGym):
         return np.sum(list(self.rwd_dict.values())) # 이게 reward
     
     def reward_total(self):
+        print("r")
         return rewardfunction(self.model,self.head_body,self.grf,self.prev_excs,rwd_type_weights = self.rwd_type_weights,rwd_weights=self.rwd_weights)
+    
     def _update_rwd_dict(self):
         self.rwd_dict = {
             "gaussian_vel": self.vel_coeff * self._gaussian_plateau_vel(),
