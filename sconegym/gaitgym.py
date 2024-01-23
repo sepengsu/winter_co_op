@@ -95,8 +95,6 @@ class SconeGym(gym.Env, ABC):
         self.set_output_dir("DATE_TIME." + self.model.name())
         self._find_head_body()
         self._setup_action_observation_spaces()
-        # delta 생성을 위한 객체 생성
-        self.grf =GRFBefore(self.model) # 빈 객체 생성 
 
     def step(self, action):
         """
@@ -290,6 +288,12 @@ class GaitGym(SconeGym):
         super().__init__(model_file, *args, **kwargs)
         self.rwd_dict = None
         self.mass = np.sum([x.mass() for x in self.model.bodies()])
+        #여기부터는 내가 추가한 부분
+        # delta 생성을 위한 객체 생성
+        self.grf =GRFBefore(self.model) # 빈 객체 생성 
+
+    def output_dir(self, dir_name):
+        self.output_dir = sconepy.replace_string_tags(dir_name)
 
     def _get_obs(self):
         if self.obs_type == '2D':
