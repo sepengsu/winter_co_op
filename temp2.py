@@ -1,6 +1,8 @@
 import temp
+import os
+import customreward
+import os
 
-diction = {'name': 'Zara', 'age': 7, 'class': 'First'}
-temp.print1()
-print(temp.function1(diction))
-temp.print1()
+print(os.path.dirname(__file__))
+a=str(customreward)
+print(a)

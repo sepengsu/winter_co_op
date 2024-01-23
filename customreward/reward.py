@@ -25,6 +25,7 @@ def settingtypeweight(type_weights = DEFAULT_WEIGHTS,setting = True):
         print("weight를 변경하지 않았습니다.")
         return
     global DEFAULT_WEIGHTS
+    print(_current_dir)
     print(_dict_name)
     for key in type_weights.keys():
         if key not in _dict_name:
