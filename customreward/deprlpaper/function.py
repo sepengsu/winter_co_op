@@ -21,7 +21,7 @@ PARA={
     "beta" : 0.8,# running avg. smoothing
     "labmda": 0.9# decay term
 }
-def totalreward(model, head_body,prev_excs,parameters = PARA,**kwargs):
+def totalreward(model, head_body,grf,prev_excs,**kwargs):
     '''
     논문참조 : https://arxiv.org/pdf/2309.02976.pdf
     https://sites.google.com/view/naturalwalkingrl
@@ -31,7 +31,6 @@ def totalreward(model, head_body,prev_excs,parameters = PARA,**kwargs):
     model: env.model
     head_body: env.head_body
     prev_excs: env.prev_excs
-    parameters: parameter dictionary
     ** kwargs:
         deprlpaper_w1: w1 - action smoothing
         deprlpaper_w2: w2 - number of active muscles above 15% activity
@@ -50,24 +49,25 @@ def totalreward(model, head_body,prev_excs,parameters = PARA,**kwargs):
     theta = kwargs.get('deprlpaper_theta',False)
     beta = kwargs.get('deprlpaper_beta',False)
     labmda = kwargs.get('deprlpaper_labmda',False)
+
     if w1:
-        parameters['w1'] = w1
+        PARA['w1'] = float(w1)
     if w2:
-        parameters['w2'] = w2
+        PARA['w2'] = float(w2)
     if w3:
-        parameters['w3'] = w3
+        PARA['w3'] = float(w3)
     if w4:
-        parameters['w4'] = w4
+        PARA['w4'] = float(w4)
     if delta_alpha:
-        parameters['delta_alpha'] = delta_alpha
+        PARA['delta_alpha'] = float(delta_alpha)
     if theta:
-        parameters['theta'] = theta
+        PARA['theta'] = float(theta)
     if beta:
-        parameters['beta'] = beta
+        PARA['beta'] = float(beta)
     if labmda:
-        parameters['labmda'] = labmda
+        PARA['labmda'] = float(labmda)
     
-    r = r_vel(model) - c_effort(model,head_body,prev_excs,parameters['w1'],parameters['w2'],parameters) - c_pain(model,model.bodies(),parameters['w3'],parameters['w4'])
+    r = r_vel(model) - c_effort(model,prev_excs,PARA['w1'],PARA['w2']) - c_pain(model,PARA['w3'],PARA['w4'])
 
     return r
 
@@ -78,7 +78,7 @@ def r_vel(model,v_target = 1.2):
         r = 1
     return r
 
-def c_effort(model,head_body,prev_excs,w1:float,w2:float,parameters:dict):
+def c_effort(model,prev_excs,w1:float,w2:float):
     #a =np.sqrt(np.sum(model.muscle_excitation_array()**2))**3
     a = 0
     u= model.muscle_excitation_array()
@@ -90,7 +90,7 @@ def c_effort(model,head_body,prev_excs,w1:float,w2:float,parameters:dict):
     #c  = alpha_t()a**3 +w1*(u-u_prev)**2 + w2*N_active
     return c
 
-def c_pain(model,bodies:list,w3:float,w4:float):
+def c_pain(model,w3:float,w4:float):
     limit_torque = [item.limit_torque().array() for item in model.joints()]
     sum_tau = all_com_sum(limit_torque)
     foot_l = model.bodies()[7].contact_force().array()

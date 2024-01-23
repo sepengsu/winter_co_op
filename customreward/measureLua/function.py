@@ -1,4 +1,4 @@
-DEFAULT_WEIGHTS = {'Gait': 100,
+MEASURELUA_WEIGHTS = {'Gait': 100,
  'Effort': -1.3079,
  'ActivationSquared': -0.0009657,
  'HeadAcceleration': -1.1628,
@@ -8,7 +8,7 @@ DEFAULT_WEIGHTS = {'Gait': 100,
 import customreward.measureLua as lua
 from myutils.kwargs_utils import _sum_weight_and_rwd
 
-def totalreward(model,head_body,grf,weights = DEFAULT_WEIGHTS,eff_type = 'TotalForce',**kwargs):
+def totalreward(model,head_body,grf,prev_excs,**kwargs):
     ''' 제시되어
     논문에  있는 함수를 lua로 코딩되어 있는 것들을 파이썬으로 바꾼다. 
     참조 논문: https://www.sciencedirect.com/science/article/pii/S0021929021003110?via%3Dihub
@@ -16,8 +16,6 @@ def totalreward(model,head_body,grf,weights = DEFAULT_WEIGHTS,eff_type = 'TotalF
     input 설명
     model: env.model, head_body: env.head_body
     grf: env.grf
-    weights: weight dictionary
-    eff_type: effort type
 
     kwargs:
     - measureLua_Gait : Gait
@@ -37,6 +35,7 @@ def totalreward(model,head_body,grf,weights = DEFAULT_WEIGHTS,eff_type = 'TotalF
     coeff 관련 문제가 발생함. 중요도에 따른 조정해야함 
     '''
     #change weight
+    eff_type = kwargs.get('measure_Lua_efftype','TotalForce')
     Gait = kwargs.get('measureLua_Gait',False)
     Effort = kwargs.get('measureLua_Effort',False)
     ActivationSquared = kwargs.get('measureLua_ActivationSquared',False)
@@ -45,23 +44,23 @@ def totalreward(model,head_body,grf,weights = DEFAULT_WEIGHTS,eff_type = 'TotalF
     KneeLimitForce = kwargs.get('measureLua_KneeLimitForce',False)
     DoLimits = kwargs.get('measureLua_DoLimits',False)
     if Gait:
-        weights['Gait'] = Gait
+        MEASURELUA_WEIGHTS ['Gait'] = Gait
     if Effort:
-        weights['Effort'] = Effort
+        MEASURELUA_WEIGHTS ['Effort'] = Effort
     if ActivationSquared:
-        weights['ActivationSquared'] = ActivationSquared
+        MEASURELUA_WEIGHTS ['ActivationSquared'] = ActivationSquared
     if HeadAcceleration:
-        weights['HeadAcceleration'] = HeadAcceleration
+        MEASURELUA_WEIGHTS ['HeadAcceleration'] = HeadAcceleration
     if GRFJerk:
-        weights['GRFJerk'] = GRFJerk
+        MEASURELUA_WEIGHTS ['GRFJerk'] = GRFJerk
     if KneeLimitForce:
-        weights['KneeLimitForce'] = KneeLimitForce
+        MEASURELUA_WEIGHTS ['KneeLimitForce'] = KneeLimitForce
     if DoLimits:
-        weights['DoLimits'] = DoLimits
+        MEASURELUA_WEIGHTS ['DoLimits'] = DoLimits
 
-
+    
     rwd_dict = dict()
-    names = list(DEFAULT_WEIGHTS.keys())
+    names = list(MEASURELUA_WEIGHTS.keys())
     #1. Gait measure
     rwd_dict[names[0]] = lua.gait_measure(model)
     #2. Effort
@@ -76,4 +75,4 @@ def totalreward(model,head_body,grf,weights = DEFAULT_WEIGHTS,eff_type = 'TotalF
     rwd_dict[names[4]] = 0 
     #7. DoLimits
     rwd_dict[names[5]] = 0
-    return _sum_weight_and_rwd(weights,rwd_dict)
+    return _sum_weight_and_rwd(MEASURELUA_WEIGHTS ,rwd_dict)

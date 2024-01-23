@@ -5,7 +5,7 @@ import pandas as pd
 _current_dir = os.path.dirname(__file__)
 
 # Get the names of all subdirectories in the current directory
-all_names = [name.split('\\')[-1] for name in os.listdir(_current_dir) if os.path.isdir(os.path.join(_current_dir, name)) and not name.startswith('__')]
+all_names = [name.split('\\')[-1] for name in os.listdir(_current_dir) if os.path.isdir(os.path.join(_current_dir, name)) and not name.startswith('__') and not 'GRFBefore']
 
 _dict_name = all_names
 DEFAULT_WEIGHTS  = dict(zip(_dict_name,np.zeros(len(_dict_name))))
@@ -48,7 +48,7 @@ def settingrewardweight(reward_weights,setting = True):
         DEFAULT_REWARD_WEIGHTS[key] = reward_weights[key]
 
 
-def rewardfunction(model,head_hody, grf,prev_excs,type_weights = DEFAULT_WEIGHTS,reward_weights = DEFAULT_REWARD_WEIGHTS):
+def rewardfunction(model,head_body, grf,prev_excs,type_weights = DEFAULT_WEIGHTS,reward_weights = DEFAULT_REWARD_WEIGHTS):
     '''
     종합 reward function
 
@@ -63,7 +63,7 @@ def rewardfunction(model,head_hody, grf,prev_excs,type_weights = DEFAULT_WEIGHTS
     for key in type_weights.keys():
        string = f'import customreward.{key} as {key}'
        exec(string) 
-       string = f'Dict[key] = {key}.totalreward(model,head_hody,grf,prev_excs,**reward_weights)' 
+       string = f'Dict[key] = {key}.totalreward(model,head_body,grf,prev_excs,**reward_weights)' 
        exec(string)
 
     return _sum_weight_and_rwd(type_weights,Dict)

@@ -51,7 +51,7 @@ class MyBalance():
             
             return _sum_weight_and_rwd(self.weight_dict,self.rwd_dict)
         
-def totalreward(model,head_body,grf,prev_excs,weight = BALANCE_WEIGHTS, **kwargs):
+def totalreward(model,head_body,grf,prev_excs,**kwargs):
     '''
     model: env.model
     head_body: env.head_body
@@ -71,13 +71,13 @@ def totalreward(model,head_body,grf,prev_excs,weight = BALANCE_WEIGHTS, **kwargs
     diff_position_z = kwargs.get('balance_diff_position_z',False)
     velocity_z = kwargs.get('balance_velocity_z',False)
     if position_z:
-        weight['position_z'] = position_z
+        BALANCE_WEIGHTS['position_z'] = position_z
     if diff_position_z:
-        weight['diff_position_z'] = diff_position_z
+        BALANCE_WEIGHTS['diff_position_z'] = diff_position_z
     if velocity_z:
-        weight['velocity_z'] = velocity_z
+        BALANCE_WEIGHTS['velocity_z'] = velocity_z
 
     #calculate reward
-    balance = MyBalance(weight,model,head_body)
+    balance = MyBalance(BALANCE_WEIGHTS,model,head_body)
     return balance.return_reward()
 
