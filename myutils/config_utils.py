@@ -105,38 +105,15 @@ def make_weight_dict(config,is_weight = False):
     return config
 
 def make_type_dict(config,is_weight = False):
-    '''
-    make_weight_dict 함수는 주어진 config 딕셔너리에 reward_weight를 추가하는 함수입니다.
-    input 함수를 통해 reward_type, weight_name, weight를 입력받아 reward_weight를 만듭니다.
-
-    Guide:
-        reward_type, weight_name, weight를 입력받아 reward_weight를 만듭니다.        
-        reward_type, weight_name은 문자열이며, weight는 실수입니다.
-        key를 input 할 때에는 reward_type , weight_name 이렇게 쓰세요.
-        weight는 실수로 입력하세요.
-        reward_weight를 추가할지 여부를 입력받아 추가할 경우 reward_type, weight_name, weight를 입력받습니다.
-        reward_weight를 추가하지 않을 경우 config 딕셔너리를 그대로 반환합니다.
-        
-    Parameters:
-        config (dict): 설정을 담고 있는 딕셔너리
-        is_weight (bool, optional): weight를 추가할지 여부를 나타내는 불리언 값. 기본값은 False입니다.
-    
-    Returns:
-        dict: reward_weight가 추가된 config 딕셔너리
-    
-    '''
-    weight_dict = dict()
+    config['tonic']['type_weight'] = dict()
     while is_weight:
-        reward_type, weight_name = input('reward type, weight name 이렇게 입력하세요: ').split(',')
+        reward_type= input('reward type 이렇게 입력하세요: ')
         reward_type = reward_type.strip()
-        weight_name = weight_name.strip()
         weight = float(input('weight를 입력하세요: '))
-        weight_dict[f'{reward_type}_{weight_name}'] = weight
+        config['tonic']['type_weight'][reward_type] = weight
         is_weight = input('weight를 추가하시겠습니까? (y/n): ')
         if is_weight == 'n':
             is_weight = False
-            
-    config['tonic']['reward_weight'] = weight_dict
     return config
 # 숨겨진 함수
 def _generate_trainer_string(inputs:str):
