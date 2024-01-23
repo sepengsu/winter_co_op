@@ -140,9 +140,9 @@ class MyTrainer(Trainer):
                     # save time iteration dict
                     self.save_time(save_path, epochs, episodes)
                     steps_since_save = self.steps % self.save_steps
-                    print()
+                    print("-" * 30)
                     logger.log(f"Saved a checkpoint when step={self.steps}")
-                    print()
+                    print("-" * 30)
 
                 if stop_training:
                     self.close_mp_envs()

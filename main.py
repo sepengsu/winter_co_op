@@ -1,7 +1,7 @@
 from deprl.main import set_tensor_device
 from myutils import logger
 from myutils.trainer import MyTrainer 
-from myutils import custom_distributed
+from deprl import custom_distributed
 from deprl.utils import load_checkpoint
 import torch
 import os
@@ -30,8 +30,8 @@ def train(config,setting = False):
         config["env_args"] = {}
 
     # set weight    
-    settingtypeweight(tonic_conf['type_weight'],setting=setting)
-    settingrewardweight(reward_weights = tonic_conf['reward_weight'],setting =setting)
+    settingtypeweight(config['weights']['type'],setting=setting)
+    settingrewardweight(reward_weights = config['weights']['reward'],setting =setting)
     #showingweight()
 
     # Build the training environment.
@@ -64,7 +64,6 @@ def train(config,setting = False):
         sequential=1,
     )
     test_environment.initialize(seed=tonic_conf["seed"] + 1000000)
-    test_environment.setting(tonic_conf['reward_weight']) # setting reward weight
 
     # Build the agent.
     if "agent" not in tonic_conf or tonic_conf["agent"] is None:

@@ -37,6 +37,7 @@ def configmake(config:dict, skip_while_loop: bool = False):
     Returns:
         dict: 수정된 설정 정보를 담고 있는 딕셔너리
     """
+    config['weights'] = {'type':0,'reward':0}
     if skip_while_loop:
         print("설정을 바꾸지 않고 종료합니다.")
         return config
@@ -66,7 +67,7 @@ def configmake(config:dict, skip_while_loop: bool = False):
         else:
             print("잘못입력되어 수정 없이 종료합니다")
             break
-    
+
     return config
 
 def make_weight_dict(config,is_weight = False):
@@ -101,20 +102,21 @@ def make_weight_dict(config,is_weight = False):
         if is_weight == 'n':
             is_weight = False
             
-    config['tonic']['reward_weight'] = weight_dict
+    config['weights']['reward'] = weight_dict
     return config
 
 def make_type_dict(config,is_weight = False):
-    config['tonic']['type_weight'] = dict()
+    config['weights']['type'] = dict()
     while is_weight:
         reward_type= input('reward type 이렇게 입력하세요: ')
         reward_type = reward_type.strip()
         weight = float(input('weight를 입력하세요: '))
-        config['tonic']['type_weight'][reward_type] = weight
+        config['weights']['type'][reward_type] = weight
         is_weight = input('weight를 추가하시겠습니까? (y/n): ')
         if is_weight == 'n':
             is_weight = False
     return config
+
 # 숨겨진 함수
 def _generate_trainer_string(inputs:str):
     """
