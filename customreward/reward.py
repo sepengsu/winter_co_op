@@ -10,7 +10,7 @@ all_names = [name.split('\\')[-1] for name in os.listdir(_current_dir) if (not n
 _dict_name = all_names
 DEFAULT_WEIGHTS  = dict(zip(_dict_name,np.zeros(len(_dict_name))))
 
-def settingtypeweight(type_weights = DEFAULT_WEIGHTS,setting = True):
+def settingtypeweight(type_weights = DEFAULT_WEIGHTS,setting = True): # 안씀
     '''
     weight를 설정하는 함수
     Parameters:
@@ -29,7 +29,7 @@ def settingtypeweight(type_weights = DEFAULT_WEIGHTS,setting = True):
 
 
 DEFAULT_REWARD_WEIGHTS = dict()
-def settingrewardweight(reward_weights,setting = True):
+def settingrewardweight(reward_weights,setting = True): # 안씀
     '''
     weight를 설정하는 함수
     Parameters:
@@ -45,7 +45,7 @@ def settingrewardweight(reward_weights,setting = True):
         DEFAULT_REWARD_WEIGHTS[key] = reward_weights[key]
 
 
-def rewardfunction(model,head_body, grf,prev_excs):
+def rewardfunction(model,head_body, grf,prev_excs,rwd_type_weights = DEFAULT_WEIGHTS,rwd_weights = DEFAULT_REWARD_WEIGHTS): 
     '''
     종합 reward function
 
@@ -57,15 +57,13 @@ def rewardfunction(model,head_body, grf,prev_excs):
     '''
     Dict = dict(zip(_dict_name,np.zeros(len(_dict_name))))
     
-    for key in DEFAULT_WEIGHTS.keys():
+    for key in rwd_type_weights.keys():
        string = f'import customreward.{key} as {key}'
        exec(string) 
-       string = f'Dict[key] = {key}.totalreward(model,head_body,grf,prev_excs,**DEFAULT_REWARD_WEIGHTS)' 
+       string = f'Dict[key] = {key}.totalreward(model,head_body,grf,prev_excs,**rd_weights)' 
        exec(string)
 
-    reward = _sum_weight_and_rwd(DEFAULT_WEIGHTS,Dict)
-    print(DEFAULT_WEIGHTS)
-    print(reward)
+    reward = _sum_weight_and_rwd(rwd_type_weights,Dict)
     return reward
 
 def showingweight():

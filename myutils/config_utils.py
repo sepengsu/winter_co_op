@@ -69,6 +69,26 @@ def configmake(config:dict, skip_while_loop: bool = False):
             break
 
     return config
+# rwd_type_weights = dict(),rwd_weights=dict()
+def make_env(config):
+    cur_env = config['tonic']['environment']
+    rwd_type_weights = config['weights']['type']
+    rwd_weights = config['weights']['reward']
+    if len() == 0 and len(rwd_weights) == 0:
+        print('환경을 바꾸지 않고 종료합니다.')
+        return config
+    if len(rwd_type_weights) == 0:
+        cur_env = cur_env[:-1]+f',rwd_weights={rwd_weights})'
+        config['tonic']['environment'] = cur_env
+        return config
+    if len(rwd_weights) == 0:
+        cur_env = cur_env[:-1]+f',rwd_type_weights={rwd_type_weights})'
+        config['tonic']['environment'] = cur_env
+        return config
+    else:
+        cur_env = cur_env[:-1]+f',rwd_type_weights={rwd_type_weights},rwd_weights={rwd_weights})'
+        config['tonic']['environment'] = cur_env
+        return config
 
 def make_weight_dict(config,is_weight = False):
     '''
