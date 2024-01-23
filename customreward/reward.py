@@ -76,6 +76,7 @@ def showingweight():
     if sum(DEFAULT_REWARD_WEIGHTS.values()) == 0:
         print("reward weight를 변경하지 않았습니다.")
     else:
+        print("변경된 reward 가중치를 보여줍니다.")
         print(pd.DataFrame.from_dict(DEFAULT_REWARD_WEIGHTS, orient='index').reset_index().rename(columns={'index': 'Key', 0: 'Value'}))
     
         
