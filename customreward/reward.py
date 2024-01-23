@@ -21,7 +21,6 @@ def settingtypeweight(type_weights = DEFAULT_WEIGHTS,setting = True):
         print("weight를 변경하지 않았습니다.")
         return
     global DEFAULT_WEIGHTS
-    print(DEFAULT_WEIGHTS)
     for key in type_weights.keys():
         if key not in _dict_name:
             raise ValueError(f'Unknown argument: {key}')
@@ -72,8 +71,15 @@ def rewardfunction(model,head_body, grf,prev_excs):
 def showingweight():
     '''weight를 보여주는 함수'''
     print("type_weight를 보여줍니다.")
-    print(pd.DataFrame.from_dict(DEFAULT_WEIGHTS, orient='index').reset_index().rename(columns={'index': 'Key', 0: 'Value'}))
-    print(pd.DataFrame.from_dict(DEFAULT_REWARD_WEIGHTS, orient='index').reset_index().rename(columns={'index': 'Key', 0: 'Value'}))
+    if sum(DEFAULT_WEIGHTS.values()) == 0:
+        print("customreward 함수를 사용하지 않았습니다.")
+    else:
+        print(pd.DataFrame.from_dict(DEFAULT_WEIGHTS, orient='index').reset_index().rename(columns={'index': 'Key', 0: 'Value'}))
+    if sum(DEFAULT_REWARD_WEIGHTS.values()) == 0:
+        print("reward weight를 변경하지 않았습니다.")
+    else:
+        print(pd.DataFrame.from_dict(DEFAULT_REWARD_WEIGHTS, orient='index').reset_index().rename(columns={'index': 'Key', 0: 'Value'}))
+    
         
 def _sum_weight_and_rwd(weights:dict,rwd_dict:dict):
     '''이 함수는 weight x reward를 계산하는 함수이다.'''
