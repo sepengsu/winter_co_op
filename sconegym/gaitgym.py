@@ -403,7 +403,7 @@ class GaitGym(SconeGym):
         return np.sum(list(self.rwd_dict.values())) # 이게 reward
     
     def reward_total(self):
-        return rewardfunction(self.model,self.head_body,self.grf,self.prev_excs,rwd_type_weights = self.rwd_type_weights,reward_weights=self.rwd_weights)
+        return rewardfunction(self.model,self.head_body,self.grf,self.prev_excs,rwd_type_weights = self.rwd_type_weights,rwd_weights=self.rwd_weights)
     def _update_rwd_dict(self):
         self.rwd_dict = {
             "gaussian_vel": self.vel_coeff * self._gaussian_plateau_vel(),

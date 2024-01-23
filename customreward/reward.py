@@ -60,7 +60,7 @@ def rewardfunction(model,head_body, grf,prev_excs,rwd_type_weights = DEFAULT_WEI
     for key in rwd_type_weights.keys():
        string = f'import customreward.{key} as {key}'
        exec(string) 
-       string = f'Dict[key] = {key}.totalreward(model,head_body,grf,prev_excs,**rd_weights)' 
+       string = f'Dict[key] = {key}.totalreward(model,head_body,grf,prev_excs,**rwd_weights)' 
        exec(string)
 
     reward = _sum_weight_and_rwd(rwd_type_weights,Dict)

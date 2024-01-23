@@ -74,7 +74,7 @@ def make_env(config):
     cur_env = config['tonic']['environment']
     rwd_type_weights = config['weights']['type']
     rwd_weights = config['weights']['reward']
-    if len() == 0 and len(rwd_weights) == 0:
+    if len(rwd_type_weights) == 0 and len(rwd_weights) == 0:
         print('환경을 바꾸지 않고 종료합니다.')
         return config
     if len(rwd_type_weights) == 0:
