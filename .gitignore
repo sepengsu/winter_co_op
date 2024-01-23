@@ -3,10 +3,15 @@ results/
 site-packages/
 temp/
 **/*.pyc
-temp.ipynb
-soncepy_1228.ipynb
-using_source.ipynb
 **/*ipynb
 temp.py
 dummy/
 depRL-main/
+
+#마지막에는 commit으로 올려야하는 것 
+trainconfig/
+config.txt
+training.ipynb
+inference.ipynb
+draw.ipynb
+
