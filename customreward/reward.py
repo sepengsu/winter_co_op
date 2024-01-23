@@ -58,7 +58,6 @@ def rewardfunction(model,head_hody, grf,prev_excs,type_weights = DEFAULT_WEIGHTS
         ex) balance_position_z : position_z 의 weight를 변경
         즉, (reward type)_(weight name) = (weight)으로 변경해야한다.
     '''
-    print(pd.DataFrame(type_weights))
     Dict = dict(zip(_dict_name,np.zeros(len(_dict_name))))
     
     for key in type_weights.keys():
