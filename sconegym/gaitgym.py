@@ -35,7 +35,7 @@ DEFAULT_REW_KEYS = {
     "nmuscle_coeff": -1.579,
     "self_contact_coeff":0.0,
 }
-Dict = dict() # reward type별 weight를 저장하는 dictionary
+
 class SconeGym(gym.Env, ABC):
     """
     Main general purpose class that gives you a gym-ready sconepy interface
@@ -386,6 +386,9 @@ class GaitGym(SconeGym):
         self.total_steps += 1
         self.steps += 1
         return self.custom_reward() +self.reward_total()
+    
+    def setting(self,coeff_dict):
+        self.coeff_dict = coeff_dict
         
     def custom_reward(self):
         self._update_rwd_dict()
