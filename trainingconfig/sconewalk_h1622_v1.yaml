@@ -33,19 +33,12 @@ tonic:
   environment: deprl.environments.Gym('sconewalk_h1622-v1', scaled_actions=False)
   full_save: 1
   header: import deprl, gym, sconegym
-  name: temp_0122
+  name: sconewalk_h1622_v1
   parallel: 20
   resume: true
-  reward_weight:
-    balance_diff_position_z: 0.4
-    balance_position_z: 0.3
-    balance_velocity_z: 0.3
+  reward_weight: {}
   seed: 0
   sequential: 10
   test_environment: null
-  trainer: MyTrainer(steps=int(2e5)*500, epoch_steps=int(2e5), save_steps=int(1e6))
-  type_weight:
-    balance: 3
-    deprlpaper: 0
-    measureLua: 0
+  trainer: deprl.custom_trainer.Trainer(steps=int(5e8), epoch_steps=int(2e5), save_steps=int(1e6))
 working_dir: IGNORED_FOR_HYFYDY
