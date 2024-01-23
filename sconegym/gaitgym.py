@@ -392,7 +392,7 @@ class GaitGym(SconeGym):
         return np.sum(list(self.rwd_dict.values())) # 이게 reward
     
     def reward_total(self):
-        return rewardfunction(self.model,self.head_body,self.grf,self.prev_excs,**self.coeff_dict)
+        return rewardfunction(self.model,self.head_body,self.grf,self.prev_excs)
 
     def _update_rwd_dict(self):
         self.rwd_dict = {
