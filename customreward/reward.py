@@ -2,17 +2,13 @@ import numpy as np
 import os
 import pandas as pd
 # Get the path of the current directory
-_current_dir = os.path.dirname(__file__)
+_current_dir = '\\'.join(str(__file__).split('\\')[:-1])
 
 # Get the names of all subdirectories in the current directory
-all_names = [name.split('\\')[-1] for name in os.listdir(_current_dir) if os.path.isdir(os.path.join(_current_dir, name)) and not name.startswith('__') and not 'GRFBefore']
+all_names = [name.split('\\')[-1] for name in os.listdir(_current_dir) if (not name.startswith('__')) and not (name=='reward.py')]
 
 _dict_name = all_names
 DEFAULT_WEIGHTS  = dict(zip(_dict_name,np.zeros(len(_dict_name))))
-DEFAULT_WEIGHTS['balance'] = 0
-DEFAULT_WEIGHTS['deprlpaper'] = 0
-DEFAULT_WEIGHTS['measureLua'] = 0
-DEFAULT_WEIGHTS['grfreduce'] = 0
 
 def settingtypeweight(type_weights = DEFAULT_WEIGHTS,setting = True):
     '''
@@ -25,7 +21,7 @@ def settingtypeweight(type_weights = DEFAULT_WEIGHTS,setting = True):
         print("weight를 변경하지 않았습니다.")
         return
     global DEFAULT_WEIGHTS
-    print(_dict_name)
+    print(DEFAULT_WEIGHTS)
     for key in type_weights.keys():
         if key not in _dict_name:
             raise ValueError(f'Unknown argument: {key}')
