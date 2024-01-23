@@ -2,9 +2,8 @@ from myutils.kwargs_utils import _sum_weight_and_rwd
 from . import first
 
 DEFAULT_WEIGHTS ={
-    'grfdelta': 1,
+    'grfdelta': -1,
     'grf' : 0,
-    'temp': 0
 }
 def totalreward(model,head_body,grf,prev_excs,**kwargs):
     '''
@@ -26,6 +25,6 @@ def totalreward(model,head_body,grf,prev_excs,**kwargs):
     for key in DEFAULT_WEIGHTS:
         function = getattr(first,key,False)
         if function:
-            reward_dict[key] = function(model,head_body,grf,**kwargs)
+            reward_dict[key] = function(model,head_body,grf)
     
-    return _sum_weight_and_rwd(DEFAULT_WEIGHTS,rwd_dict=reward_dict)
+    return _sum_weight_and_rwd(weights=DEFAULT_WEIGHTS,rwd_dict=reward_dict)

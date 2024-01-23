@@ -392,8 +392,8 @@ class GaitGym(SconeGym):
         """
         self.total_steps += 1
         self.steps += 1
-        #return self.custom_reward() +self.reward_total()
-        return self.reward_total()
+        return self.custom_reward() +self.reward_total()
+        #return self.reward_total()
     
     def setting(self,coeff_dict):
         self.coeff_dict = coeff_dict
