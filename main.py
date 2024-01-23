@@ -32,7 +32,7 @@ def train(config,setting = False):
     # set weight    
     settingtypeweight(config['weights']['type'],setting=setting)
     settingrewardweight(reward_weights = config['weights']['reward'],setting =setting)
-    #showingweight()
+    showingweight()
 
     # Build the training environment.
     _environment = tonic_conf["environment"]

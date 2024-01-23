@@ -12,6 +12,7 @@ DEFAULT_WEIGHTS  = dict(zip(_dict_name,np.zeros(len(_dict_name))))
 DEFAULT_WEIGHTS['balance'] = 0
 DEFAULT_WEIGHTS['deprlpaper'] = 0
 DEFAULT_WEIGHTS['measureLua'] = 0
+DEFAULT_WEIGHTS['grfreduce'] = 0
 
 def settingtypeweight(type_weights = DEFAULT_WEIGHTS,setting = True):
     '''
@@ -24,6 +25,7 @@ def settingtypeweight(type_weights = DEFAULT_WEIGHTS,setting = True):
         print("weight를 변경하지 않았습니다.")
         return
     global DEFAULT_WEIGHTS
+    print(_dict_name)
     for key in type_weights.keys():
         if key not in _dict_name:
             raise ValueError(f'Unknown argument: {key}')
@@ -48,7 +50,7 @@ def settingrewardweight(reward_weights,setting = True):
         DEFAULT_REWARD_WEIGHTS[key] = reward_weights[key]
 
 
-def rewardfunction(model,head_body, grf,prev_excs,type_weights = DEFAULT_WEIGHTS,reward_weights = DEFAULT_REWARD_WEIGHTS):
+def rewardfunction(model,head_body, grf,prev_excs):
     '''
     종합 reward function
 
@@ -60,19 +62,22 @@ def rewardfunction(model,head_body, grf,prev_excs,type_weights = DEFAULT_WEIGHTS
     '''
     Dict = dict(zip(_dict_name,np.zeros(len(_dict_name))))
     
-    for key in type_weights.keys():
+    for key in DEFAULT_WEIGHTS.keys():
        string = f'import customreward.{key} as {key}'
        exec(string) 
-       string = f'Dict[key] = {key}.totalreward(model,head_body,grf,prev_excs,**reward_weights)' 
+       string = f'Dict[key] = {key}.totalreward(model,head_body,grf,prev_excs,**DEFAULT_REWARD_WEIGHTS)' 
        exec(string)
 
-    return _sum_weight_and_rwd(type_weights,Dict)
+    reward = _sum_weight_and_rwd(DEFAULT_WEIGHTS,Dict)
+    print(DEFAULT_WEIGHTS)
+    print(reward)
+    return reward
 
-def showingweight(type_weights = DEFAULT_WEIGHTS,reward_weights=DEFAULT_REWARD_WEIGHTS):
+def showingweight():
     '''weight를 보여주는 함수'''
     print("type_weight를 보여줍니다.")
-    print(pd.DataFrame.from_dict(type_weights, orient='index').reset_index().rename(columns={'index': 'Key', 0: 'Value'}))
-    print(pd.DataFrame.from_dict(reward_weights, orient='index').reset_index().rename(columns={'index': 'Key', 0: 'Value'}))
+    print(pd.DataFrame.from_dict(DEFAULT_WEIGHTS, orient='index').reset_index().rename(columns={'index': 'Key', 0: 'Value'}))
+    print(pd.DataFrame.from_dict(DEFAULT_REWARD_WEIGHTS, orient='index').reset_index().rename(columns={'index': 'Key', 0: 'Value'}))
         
 def _sum_weight_and_rwd(weights:dict,rwd_dict:dict):
     '''이 함수는 weight x reward를 계산하는 함수이다.'''
