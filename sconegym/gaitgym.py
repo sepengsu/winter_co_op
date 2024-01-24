@@ -292,8 +292,8 @@ class GaitGym(SconeGym):
         # delta 생성을 위한 객체 생성
         self.grf =GRFBefore(self.model) # 빈 객체 생성 
         self.grf.initialize()
-        self.rwd_type_weights = eval(rwd_type_weights) if len(rwd_type_weights)>0 else None
-        self.rwd_weights = eval(rwd_weights) if len(rwd_weights)>0 else None
+        self.rwd_type_weights = rwd_type_weights if len(rwd_type_weights)>0 else None
+        self.rwd_weights = rwd_weights if len(rwd_weights)>0 else None
 
     def output_dir(self, dir_name):
         self.output_dir = sconepy.replace_string_tags(dir_name)

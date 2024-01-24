@@ -125,7 +125,9 @@ def train(config,setting = False):
 
     # Train.
     try:
+        print("Training started.")
         trainer.run(config, **time_dict)
+        print("Training finished.")
     except Exception as e:
         logger.log(f"trainer failed. Exception: {e}")
         raise e
