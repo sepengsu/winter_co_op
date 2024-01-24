@@ -6,6 +6,8 @@ import numpy as np
 from deprl.utils import stdout_suppression
 
 
+import logging
+
 def proc(
     action_pipe,
     output_queue,
@@ -18,16 +20,31 @@ def proc(
     header,
 ):
     """Process holding a sequential group of environments."""
-    envs = Sequential(build_dict, max_episode_steps, workers, env_args, header)
-    envs.initialize(group_seed)
+    # 로거 설정
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.ERROR)
+    handler = logging.FileHandler('proc_errors.log')
+    handler.setLevel(logging.ERROR)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
 
-    observations = envs.start()
-    output_queue.put((index, observations))
+    try:
+        envs = Sequential(build_dict, max_episode_steps, workers, env_args, header)
+        envs.initialize(group_seed)
 
-    while True:
-        actions = action_pipe.recv()
-        out = envs.step(actions)
-        output_queue.put((index, out))
+        observations = envs.start()
+        output_queue.put((index, observations))
+
+        while True:
+            actions = action_pipe.recv()
+            out = envs.step(actions)
+            output_queue.put((index, out))
+    except Exception as e:
+        # 예외 발생 시 로그 파일에 기록
+        logger.error("Error in proc function: %s", str(e))
+    else:
+        logger.info("proc function finished")
 
 
 class Sequential:

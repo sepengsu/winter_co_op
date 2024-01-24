@@ -47,6 +47,7 @@ class MyTrainer(Trainer):
 
         def on_key_press(event):
             if event.name == 'q':
+                logger.error("KeyboardInterrupt")
                 sys.exit()
 
         keyboard.on_press(on_key_press)
