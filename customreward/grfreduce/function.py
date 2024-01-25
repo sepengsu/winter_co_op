@@ -6,10 +6,12 @@ DEFAULT_WEIGHTS ={
     'grfdelta_x':0,
     'grf' : 0
 }
+
 def totalreward(model,head_body,grf,prev_excs,**kwargs):
     '''
     여기서는 크게 3가지로 나눠서 계산한다.
     '''
+    print("before",grf.calcn_l,grf.calcn_r)
     typesdelta = kwargs.get('grf_types',None)
     grfdelta = kwargs.get('grf_grfdelta',None)
     grfdelta_x = kwargs.get('grf_grfdelta_x',None)
@@ -26,5 +28,5 @@ def totalreward(model,head_body,grf,prev_excs,**kwargs):
         function = getattr(first,key,False)
         if function:
             reward_dict[key] = function(model,grf)
-    
-    return _sum_weight_and_rwd(weights=DEFAULT_WEIGHTS,rwd_dict=reward_dict)
+    r = _sum_weight_and_rwd(weights=DEFAULT_WEIGHTS,rwd_dict=reward_dict)
+    return r

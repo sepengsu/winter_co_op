@@ -18,30 +18,15 @@ import sconepy
 
 class GRFBefore():
     def __init__(self,model):
-        #self.calcn_l = model.bodies()[7].contact_force() # 이렇게 할지 아니면 안에 빈 객체를 임의대로 지정할지 정하자. 
-        #self.calcn_r=model.bodies()[4].contact_force()
-        self.calcn_l = Emty()
-        self.calcn_r = Emty()
-
-    def update(self,model):
         self.calcn_l = model.bodies()[7].contact_force()
-        self.calcn_r = model.bodies()[4].contact_force()
+        self.calcn_r=  model.bodies()[4].contact_force()
 
     def left(self):
         return self.calcn_l
     
     def right(self):
         return self.calcn_r
-    # 초기화
-    def initialize(self):
-        self.calcn_l = Emty()
-        self.calcn_r = Emty()
 
-class Emty():
-    def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.z = 0
 
 def derivative_grf(model,grf:GRFBefore):
     '''
@@ -61,9 +46,6 @@ def derivative_grf(model,grf:GRFBefore):
     # 1. 계산
     impact_left = delta_all(foot_l_force,grf.calcn_l,norm_factor)
     impact_right = delta_all(foot_r_force,grf.calcn_r,norm_factor)
-
-    # update grf
-    grf.update(model)
 
     return impact_left + impact_right
 

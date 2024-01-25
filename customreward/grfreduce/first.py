@@ -20,10 +20,7 @@ def grfdelta(model,grf:GRFBefore):
     # 1. 계산
     impact_left = delta_all(foot_l_force,grf.calcn_l,norm_factor)
     impact_right = delta_all(foot_r_force,grf.calcn_r,norm_factor)
-
-    # update grf
-    grf.update(model)
-
+    
     return impact_left + impact_right
 
 def grfdelta_x(model,grf:GRFBefore):
@@ -40,6 +37,7 @@ def grfdelta_x(model,grf:GRFBefore):
 
     impact_left = _x_all(foot_l_force,grf.calcn_l.x,norm_factor)   
     impact_right = _x_all(foot_r_force,grf.calcn_r.x,norm_factor)
+
     return impact_left + impact_right
 
 def grf(model,grf:GRFBefore):

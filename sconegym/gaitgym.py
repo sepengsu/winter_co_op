@@ -114,7 +114,7 @@ class SconeGym(gym.Env, ABC):
 
         self.model.advance_simulation_to(self.time + self.step_size)
         reward = self._get_rew()
-        obs = self._get_obs()
+        obs = self._get_obs() # prev_acts, prev_excs, GRFBefore 업데이트 
         done = self._get_done()
         reward = self._apply_termination_cost(reward, done)
         self.time += self.step_size
@@ -126,7 +126,6 @@ class SconeGym(gym.Env, ABC):
                 )
                 self.store_next = False
             self.episode += 1
-            self.grf.initialize()
         # 그리고 한 step마다 grf를 업데이트 한다.
         return obs, reward, done, {}
 
@@ -153,10 +152,7 @@ class SconeGym(gym.Env, ABC):
         self.time = 0
         self.total_reward = 0.0
         self.steps = 0
-        # delta 생성을 위한 객체 생성
-        self.grf =GRFBefore(self.model) # 빈 객체 생성 
-
-
+    
         # Check if data should be stored (slow)
         self.model.set_store_data(self.store_next)
         # Randomize initial pose
@@ -188,6 +184,7 @@ class SconeGym(gym.Env, ABC):
         self.prev_acts = muscle_activations
         self.prev_excs = self.model.muscle_excitation_array()
         self.model.init_muscle_activations(muscle_activations)
+        self.grf =GRFBefore(self.model) # 객체 초기화
 
         # Initialize state and equilibrate muscles
         self.model.init_state_from_dofs()
@@ -290,8 +287,7 @@ class GaitGym(SconeGym):
         self.mass = np.sum([x.mass() for x in self.model.bodies()])
         #여기부터는 내가 추가한 부분
         # delta 생성을 위한 객체 생성
-        self.grf =GRFBefore(self.model) # 빈 객체 생성 
-        self.grf.initialize()
+        self.grf =GRFBefore(self.model) # 처음 부분 생성
         self.rwd_type_weights = rwd_type_weights if len(rwd_type_weights)>0 else None
         self.rwd_weights = rwd_weights if len(rwd_weights)>0 else None
 
@@ -307,9 +303,11 @@ class GaitGym(SconeGym):
             raise NotImplementedError
 
     def _get_obs_3d(self):
+        #현재 상태를 받아온다.
         acts = self.model.muscle_activation_array()
         self.prev_acts = self.model.muscle_activation_array().copy()
         self.prev_excs = self.model.muscle_excitation_array()
+        self.grf = GRFBefore(self.model) # grf 업데이트
         dof_values = self.model.dof_position_array()
         dof_vels = self.model.dof_velocity_array()
         # No x or y position in the state
@@ -353,6 +351,7 @@ class GaitGym(SconeGym):
         acts = self.model.muscle_activation_array()
         self.prev_acts = self.model.muscle_activation_array().copy()
         self.prev_excs = self.model.muscle_excitation_array()
+        self.grf = GRFBefore(self.model) # grf 업데이트 
         dof_values = self.model.dof_position_array()
         dof_vels = self.model.dof_velocity_array()
         dof_values[1] = 0.0

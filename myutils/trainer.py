@@ -14,6 +14,11 @@ from deprl.custom_test_environment import (
     test_scone,
 )
 
+def on_key_press(event):
+    if event.name == 'q' and keyboard.is_pressed('ctrl'):
+        logger.error("KeyboardInterrupt")
+        raise KeyboardInterrupt
+    
 class MyTrainer(Trainer):
     '''
     내가 직접 만든 Trainer deprl에서 수정함te
@@ -44,15 +49,9 @@ class MyTrainer(Trainer):
         # start time
         self.total_starttime = time.time()
         self.epoch_starttime = time.time()
-
-        def on_key_press(event):
-            if event.name == 'q':
-                logger.error("KeyboardInterrupt")
-                sys.exit()
-
-        keyboard.on_press(on_key_press)
-
+        
         while True:
+                keyboard.on_press(on_key_press)
             # Select actions.
                 if hasattr(self.agent, "expl"):
                     greedy_episode = (not episodes % self.agent.expl.test_episode_every)
@@ -142,7 +141,7 @@ class MyTrainer(Trainer):
                     self.save_time(save_path, epochs, episodes)
                     steps_since_save = self.steps % self.save_steps
                     print("-" * 30)
-                    logger.log(f"Saved a checkpoint when step={self.steps}")
+                    logger.log(f"Saved a checkpoint when Epochs: {epochs}")
                     print("-" * 30)
 
                 if stop_training:
