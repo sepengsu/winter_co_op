@@ -8,7 +8,7 @@ _current_dir = '\\'.join(str(__file__).split('\\')[:-1])
 all_names = [name.split('\\')[-1] for name in os.listdir(_current_dir) if (not name.startswith('__')) and not (name=='reward.py')]
 
 _dict_name = all_names
-DEFAULT_WEIGHTS  = dict(zip(_dict_name,np.zeros(len(_dict_name))))
+DEFAULT_WEIGHTS  = dict(zip(_dict_name,np.zeros(len(_dict_name)))) # 다 0으로 초기화
 
 def settingtypeweight(type_weights = DEFAULT_WEIGHTS,setting = True): # 안씀
     '''
@@ -39,6 +39,7 @@ def settingrewardweight(reward_weights,setting = True): # 안씀
             즉, (reward type)_(weight name) = (weight)으로 변경해야한다.
     '''
     if setting == False:
+        print("reward weight를 변경하지 않았습니다.")
         return
     global DEFAULT_REWARD_WEIGHTS
     for key in reward_weights.keys():

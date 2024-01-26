@@ -402,6 +402,8 @@ class GaitGym(SconeGym):
         return np.sum(list(self.rwd_dict.values())) # 이게 reward
     
     def reward_total(self):
+        if self.rwd_type_weights == None:
+            return 0
         return rewardfunction(self.model,self.head_body,self.grf,self.prev_excs,rwd_type_weights = self.rwd_type_weights,rwd_weights=self.rwd_weights)
     
     def _update_rwd_dict(self):

@@ -11,7 +11,6 @@ def totalreward(model,head_body,grf,prev_excs,**kwargs):
     '''
     여기서는 크게 3가지로 나눠서 계산한다.
     '''
-    print("before",grf.calcn_l,grf.calcn_r)
     typesdelta = kwargs.get('grf_types',None)
     grfdelta = kwargs.get('grf_grfdelta',None)
     grfdelta_x = kwargs.get('grf_grfdelta_x',None)

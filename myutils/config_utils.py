@@ -86,7 +86,7 @@ def make_env(config):
         config['tonic']['environment'] = cur_env
         return config
     else:
-        cur_env = cur_env[:-1]+f',rwd_type_weights={rwd_type_weights},rwd_weights={rwd_weights})'
+        cur_env = _extract_substring(cur_env)+f'rwd_type_weights={rwd_type_weights},rwd_weights={rwd_weights})'
         config['tonic']['environment'] = cur_env
         return config
 
@@ -184,6 +184,13 @@ def _step_per_epoch(code:str):
         step_match = step_match[:-1]
         return step_match[6:]
     return step_match[10:-1]
+
+def _extract_substring(string):
+    index = string.find("scaled_actions")
+    if index != -1:
+        return string[:index]
+    else:
+        return string
 
 if __name__ == "__main__":
     # Example usage

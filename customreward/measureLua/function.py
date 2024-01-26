@@ -1,10 +1,10 @@
-MEASURELUA_WEIGHTS = {'Gait': 100,
- 'Effort': -1.3079,
- 'ActivationSquared': -0.0009657,
- 'HeadAcceleration': -1.1628,
- 'GRFJerk': -0.2494,
- 'KneeLimitForce': -0.25,
- 'DoLimits': -0.1}
+MEASURELUA_WEIGHTS = {'Gait': 0,
+ 'Effort': 0,
+ 'ActivationSquared': 0,
+ 'HeadAcceleration': 0,
+ 'GRFJerk': 0,
+ 'KneeLimitForce': 0,
+ 'DoLimits': 0}
 import customreward.measureLua as lua
 from myutils.kwargs_utils import _sum_weight_and_rwd
 

@@ -12,14 +12,14 @@ elif sys.platform.startswith('darwin'):
 
 import sconepy
 PARA={
-    'w1': 0.097, # action smoothing
-    'w2': 1.579, # number of active muscles above 15% activity
-    'w3': 0.131, # joint limit torque
+    'w1': 0, # action smoothing
+    'w2': 0, # number of active muscles above 15% activity
+    'w3': 0, # joint limit torque
     'w4': 0.073,  # GRFs above 1.2 BW
-    "delta_alpha": 9e-4, # change in adaptation rate
-    "theta" :1000, # performance threshold
-    "beta" : 0.8,# running avg. smoothing
-    "labmda": 0.9# decay term
+    "delta_alpha": 0, # change in adaptation rate
+    "theta" :0, # performance threshold
+    "beta" : 0,# running avg. smoothing
+    "labmda": 0# decay term
 }
 def totalreward(model, head_body,grf,prev_excs,**kwargs):
     '''

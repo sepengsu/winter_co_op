@@ -14,7 +14,7 @@ import sconepy
 
 BALANCE_WEIGHTS = {
     'diff_position_z':  0,
-    'position_z':-1,
+    'position_z':0,
     'velocity_z': 0,
 }
 from myutils.kwargs_utils import _sum_weight_and_rwd

@@ -52,7 +52,7 @@ def inference(env, policy, num=10, save=True, Max=False,more=False, **kwargs):
 
             # check if done
             if done or (ep_steps >= 1000):
-                Epis = f"Episode {ep}: "
+                Epis = f"Episode {ep+1}: "
                 print(
                      f"{Epis}steps={ep_steps}; reward={ep_tot_reward:0.3f}, com={env.model.com_pos()}"
                 )
