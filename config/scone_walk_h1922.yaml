@@ -6,9 +6,9 @@ tonic:
     num_acts=22))"
   before_training: ''
   checkpoint: "last"
-  environment: "deprl.environments.Gym('sconewalk_h1622-v1')"
+  environment: "deprl.environments.Gym('sconewalk_h1922-v1')"
   full_save: 1
-  name: "sconewalk_h1622_v1"
+  name: "sconewalk_h1922_v1"
   resume: true
   seed: 0
   parallel: 20

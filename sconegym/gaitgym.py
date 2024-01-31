@@ -50,7 +50,7 @@ class SconeGym(gym.Env, ABC):
                  left_leg_idxs,
                  right_leg_idxs,
                  clip_actions = False,
-                 target_vel = 1.2,
+                 target_vel = [1.2-0.2,1.2+0.1],
                  leg_switch = True,
                  use_delayed_sensors=False,
                  use_delayed_actuators=False,
@@ -393,9 +393,6 @@ class GaitGym(SconeGym):
         self.steps += 1
         return self.custom_reward() +self.reward_total()
         #return self.reward_total()
-    
-    def setting(self,coeff_dict):
-        self.coeff_dict = coeff_dict
         
     def custom_reward(self):
         self._update_rwd_dict()
@@ -404,7 +401,8 @@ class GaitGym(SconeGym):
     def reward_total(self):
         if self.rwd_type_weights == None:
             return 0
-        return rewardfunction(self.model,self.head_body,self.grf,self.prev_excs,rwd_type_weights = self.rwd_type_weights,rwd_weights=self.rwd_weights)
+        return rewardfunction(self.model,self.head_body,self.grf,self.prev_excs,\
+                              rwd_type_weights = self.rwd_type_weights,rwd_weights=self.rwd_weights)
     
     def _update_rwd_dict(self):
         self.rwd_dict = {
@@ -440,16 +438,24 @@ class GaitGym(SconeGym):
             / self.action_space.shape[0]
         )
 
-    def _gaussian_vel(self):
+    def _gaussian_vel_small(self):
         vel = self.model_velocity()
-        return np.exp(-np.square(vel - self.target_vel))
+        return np.exp(-np.square(vel - self.target_vel[0]))
+    
+    def _gaussian_vel_big(self):
+        vel = self.model_velocity()
+        return np.exp(-np.square(vel - self.target_vel[1]))
 
     def _gaussian_plateau_vel(self):
         if self.run:
             return self.model_velocity()
         vel = self.model_velocity()
-        if vel < self.target_vel:
-            return self._gaussian_vel()
+        if type(self.target_vel) == float:
+            return np.exp(-np.square(vel - self.target_vel))
+        if vel < self.target_vel[0]:
+            return self._gaussian_vel_small()
+        elif vel > self.target_vel[1]:
+            return self._gaussian_vel_big()
         else:
             return 1.0
 
@@ -488,28 +494,28 @@ class GaitGym(SconeGym):
             return True
         return False
 
-    @property
-    def horizon(self):
-        # TODO put this in model kwargs such that it works with deprl
-        return 10000
+#     @property
+#     def horizon(self):
+#         # TODO put this in model kwargs such that it works with deprl
+#         return 10000
 
 
-# Tutorial environments to see features
-# The Measure one needs to be fixed
+# # Tutorial environments to see features
+# # The Measure one needs to be fixed
 
-# TODO @thomas add right model file
-class GaitGymMeasureH0918(GaitGym):
-    """
-    Shows how to use custom measures from the .scone files in
-    python.
-    """
+# # TODO @thomas add right model file
+# class GaitGymMeasureH0918(GaitGym):
+#     """
+#     Shows how to use custom measures from the .scone files in
+#     python.
+#     """
 
-    def __init__(self, *args, **kwargs):
-        self.delay = False
-        super().__init__(find_model_file("H0918_hfd_measure.scone"), *args, **kwargs)
+#     def __init__(self, *args, **kwargs):
+#         self.delay = False
+#         super().__init__(find_model_file("H0918_hfd_measure.scone"), *args, **kwargs)
 
-    def custom_reward(self):
-        self.rwd_dict = self.create_rwd_dict()
-        return self.model.current_measure()
+#     def custom_reward(self):
+#         self.rwd_dict = self.create_rwd_dict()
+#         return self.model.current_measure()
 
 

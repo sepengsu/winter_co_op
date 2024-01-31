@@ -86,7 +86,7 @@ def make_env(config):
         config['tonic']['environment'] = cur_env
         return config
     else:
-        cur_env = _extract_substring(cur_env)+f'rwd_type_weights={rwd_type_weights},rwd_weights={rwd_weights})'
+        cur_env = _extract_substring(cur_env)+f', rwd_type_weights={rwd_type_weights},rwd_weights={rwd_weights})'
         config['tonic']['environment'] = cur_env
         return config
 
@@ -123,6 +123,16 @@ def make_weight_dict(config,is_weight = False):
             is_weight = False
             
     config['weights']['reward'] = weight_dict
+    return config
+import re
+
+def change_model(config, name='sconewalk_change_model-v1', change=False):
+    if not change:
+        return config
+    code = config['tonic']['environment']
+    if 'scaled' not in code and 'deprl.environment.Gym' in code:
+        raise ValueError("무슨 환경인가요?")
+    config['tonic']['environment'] = f"deprl.environments.Gym('{name}')"
     return config
 
 def make_type_dict(config,is_weight = False):
@@ -186,11 +196,11 @@ def _step_per_epoch(code:str):
     return step_match[10:-1]
 
 def _extract_substring(string):
-    index = string.find("scaled_actions")
+    index = string.find(", scaled_actions")
     if index != -1:
         return string[:index]
     else:
-        return string
+        return string[:-1]
 
 if __name__ == "__main__":
     # Example usage

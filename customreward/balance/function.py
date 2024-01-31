@@ -34,7 +34,7 @@ class MyBalance():
         
         def position_z(self):
             pos = self.head_body.com_pos().z
-            r = np.exp(-abs(pos))
+            r = np.exp(-abs(pos)**2)
             return r
 
         def velocity_z(self):
@@ -43,8 +43,7 @@ class MyBalance():
             vel_m = self.model.com_vel().z
             vel_h = self.head_body.com_vel().z
             return wm*vel_m+wh*vel_h
-
-   
+    
         def return_reward(self):
             for name in self.weight_dict:
                 self.rwd_dict[name] = getattr(self,name)()

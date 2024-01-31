@@ -7,6 +7,7 @@ temp/
 temp.py
 dummy/
 depRL-main/
+**.zip
 
 #마지막에는 commit으로 올려야하는 것 
 trainconfig/
