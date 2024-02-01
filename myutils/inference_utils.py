@@ -106,7 +106,10 @@ def plot_3d(com_pos:np.ndarray, com_vel:np.ndarray, Max=False, vector=False, vec
     ax.set_xlabel('X')
     ax.set_ylabel('Z')
     ax.set_zlabel('Y')
-    plt.show()
+
+    plt.title(title)
+    
+    return fig
 
 def plot_2d(com_pos:np.ndarray, com_vel:np.ndarray, Max=False, vector=False, headlength=10, headwidth=3, headaxislength=4.5, scatter_size=20, vector_step=20):
     """
@@ -143,7 +146,7 @@ def plot_2d(com_pos:np.ndarray, com_vel:np.ndarray, Max=False, vector=False, hea
     ax.set_ylabel('Z')
 
     plt.title(title)
-    plt.show()
+    return fig
 
 if __name__ =="__main__":
     print("test")
