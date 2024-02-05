@@ -62,7 +62,7 @@ class MyTrainer(Trainer):
                 )
                 assert not np.isnan(actions.sum())
                 logger.store("train/action", actions, stats=True)
-
+                
                 # Take a step in the environments.
                 observations, muscle_states, info = self.environment.step(actions)
                 if "env_infos" in info:

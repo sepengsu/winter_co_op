@@ -15,7 +15,8 @@ import sconepy
 BALANCE_WEIGHTS = {
     'diff_position_z':  0,
     'position_z':0,
-    'velocity_z': 0,
+    'velocity_zhead': 0,
+    'velocity_zcom': 0
 }
 from myutils.kwargs_utils import _sum_weight_and_rwd
 
@@ -37,12 +38,13 @@ class MyBalance():
             r = np.exp(-abs(pos)**2)
             return r
 
-        def velocity_z(self):
-            wm = 0.3
-            wh = 1-wm
-            vel_m = self.model.com_vel().z
+        def velocity_zcom(self):
+            vel_m = self.model.com_vel().z 
+            return np.exp(-abs(vel_m)**2)
+        
+        def velocity_zhead(self):
             vel_h = self.head_body.com_vel().z
-            return wm*vel_m+wh*vel_h
+            return np.exp(-abs(vel_h)**2)
     
         def return_reward(self):
             for name in self.weight_dict:
@@ -68,13 +70,17 @@ def totalreward(model,head_body,grf,prev_excs,**kwargs):
     #change weight
     position_z = kwargs.get('balance_position_z',False)
     diff_position_z = kwargs.get('balance_diff_position_z',False)
-    velocity_z = kwargs.get('balance_velocity_z',False)
+    velocity_zcom = kwargs.get('balance_velocity_zcom',False)
+    velocity_zhead = kwargs.get('balance_velocity_zhead',False)
     if position_z:
         BALANCE_WEIGHTS['position_z'] = position_z
     if diff_position_z:
         BALANCE_WEIGHTS['diff_position_z'] = diff_position_z
-    if velocity_z:
-        BALANCE_WEIGHTS['velocity_z'] = velocity_z
+    if velocity_zcom:
+        BALANCE_WEIGHTS['velocity_zcom'] = velocity_zcom
+    if velocity_zhead:
+        BALANCE_WEIGHTS['velocity_zhead'] = velocity_zhead
+
 
     #calculate reward
     balance = MyBalance(BALANCE_WEIGHTS,model,head_body)

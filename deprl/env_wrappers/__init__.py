@@ -2,6 +2,7 @@ import deprl  # noqa
 from deprl.env_wrappers.dm_wrapper import DMWrapper, OstrichDMWrapper
 from deprl.env_wrappers.gym_wrapper import GymWrapper
 from deprl.env_wrappers.scone_wrapper import SconeWrapper
+from myutils.custom_wrapper import MyWrapper
 
 
 def apply_wrapper(env):
@@ -9,6 +10,8 @@ def apply_wrapper(env):
         if env.name == "ostrich-run":
             return OstrichDMWrapper(env)
         return DMWrapper(env)
+    elif "1922" in str(env).lower():
+        return MyWrapper(env)
     elif "scone" in str(env).lower():
         return SconeWrapper(env)
     else:

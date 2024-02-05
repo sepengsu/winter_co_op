@@ -122,7 +122,6 @@ def train(config,setting = False):
     # Run some code before training.
     if tonic_conf["before_training"]:
         exec(tonic_conf["before_training"])
-
     # Train.
     try:
         print("Training started.")

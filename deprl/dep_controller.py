@@ -38,6 +38,7 @@ class DEP:
         action_space = gym.spaces.Box(
             low=-1, high=1, shape=(action_space.shape)
         )
+
         self.num_sensors = action_space.shape[0]
         self.num_motors = action_space.shape[0]
         self.n_env = 1
@@ -54,6 +55,7 @@ class DEP:
         muscle_lengths + alpha * muscle_forces. Alpha can also be 0.
         """
         observations = torch.tensor(observations, dtype=torch.float32)
+        
         if observations.shape != self.obs_spec:
             self.obs_spec = observations.shape
             self._reset(observations.shape)

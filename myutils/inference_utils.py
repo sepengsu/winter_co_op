@@ -148,6 +148,18 @@ def plot_2d(com_pos:np.ndarray, com_vel:np.ndarray, Max=False, vector=False, hea
     plt.title(title)
     return fig
 
+def make6(time):
+    day = time.day
+    hour = time.hour
+    minute = time.minute
+    if day < 10:
+        day = f"0{day}"
+    if hour < 10:
+        hour = f"0{hour}"
+    if minute < 10:
+        minute = f"0{minute}"
+    return f"{day}{hour}{minute}"
+
 if __name__ =="__main__":
     print("test")
     com_pos, com_vel = np.random.rand(10,1000,3), np.random.rand(10,1000,3)

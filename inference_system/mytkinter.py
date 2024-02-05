@@ -5,6 +5,7 @@ import re
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import *
 import sys
+from myutils.analysis import plot_log
 buttonlist = ['checkbox', 'selectbox']
 
 class MyTkinter:
@@ -88,11 +89,15 @@ class MyTkinter:
         self.plot = sim.Ploting(self.data.pos,self.data.vel,\
                                 is_2d=self.option.is_2d,is_3d=self.option.is_3d)
         self.plot.plot(self.option)
+        self.plot.fig_log = plot_log(self.sim.name)
 
     def drawing(self):
         if 'canvasframe' in dir(self):
             self.canvasframe.destroy()
         self.canvasframe = Frame(master=self.window,width=500,height=100)
+        self.canvas_log = FigureCanvasTkAgg(self.plot.fig_log, master=self.canvasframe)
+        self.canvas_log.get_tk_widget().pack(side=TOP)
+        self.canvas_log.draw()
         if self.option.is_2d and self.option.is_3d:
             self.canvas_2d = FigureCanvasTkAgg(self.plot.fig_2d, master=self.canvasframe)
             self.canvas_2d.get_tk_widget().pack(side=LEFT)

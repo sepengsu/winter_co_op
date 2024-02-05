@@ -20,19 +20,16 @@ def proc(
     header,
 ):
     """Process holding a sequential group of environments."""
-    # 로거 설정
     logger = logging.getLogger(__name__)
-    logger.setLevel(logging.ERROR)
+    logger.setLevel(logging.DEBUG)
     handler = logging.FileHandler('proc_errors.log')
-    handler.setLevel(logging.ERROR)
+    handler.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-
     try:
         envs = Sequential(build_dict, max_episode_steps, workers, env_args, header)
         envs.initialize(group_seed)
-
         observations = envs.start()
         output_queue.put((index, observations))
 
@@ -43,9 +40,6 @@ def proc(
     except Exception as e:
         # 예외 발생 시 로그 파일에 기록
         logger.error("Error in proc function: %s", str(e))
-    else:
-        logger.info("proc function finished")
-
 
 class Sequential:
     """A group of environments used in sequence."""
