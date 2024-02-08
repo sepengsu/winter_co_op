@@ -1,9 +1,9 @@
 # Model used in simulation
 ModelHyfydy {
-	model_file = H1922v2k.hfd
+	model_file = H1922v2k_tm_sup.hfd
 
 	# Set initial state
-	state_init_file = InitStateH1922Gait10.zml
+	state_init_file = InitStateH1922Gait0.zml
 	fixed_control_step_size = 0.005
 	initial_equilibration_activation = 0.05
 	zero_velocity_equilibration = 1

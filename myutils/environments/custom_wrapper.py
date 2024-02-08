@@ -1,6 +1,6 @@
 from deprl.env_wrappers.scone_wrapper import SconeWrapper
 import numpy as np
-import logging
+from deprl.vendor.tonic import logger
 
 class MyWrapper(SconeWrapper):
     def __init__(self, env):
@@ -9,21 +9,6 @@ class MyWrapper(SconeWrapper):
     def render(self, *args, **kwargs):
         pass
 
-    def muscle_lengths(self):
-        length = self.unwrapped.model.muscle_fiber_length_array()
-        return length
-
-    def muscle_forces(self):
-        force = self.unwrapped.model.muscle_force_array()
-        return force
-
-    def muscle_velocities(self):
-        velocity = self.unwrapped.model.muscle_fiber_velocity_array()
-        return velocity
-
-    def muscle_activity(self):
-        return self.unwrapped.model.muscle_activation_array()
-
     def write_now(self):
         if self.unwrapped.store_next:
             self.model.write_results(
@@ -31,6 +16,23 @@ class MyWrapper(SconeWrapper):
             )
         self.episode += 1
         self.unwrapped.store_next = False
+
+    
+    def step(self, action):
+        try:
+            observation, reward, done, info = self._inner_step(action)
+            if np.any(np.isnan(observation)):
+                raise self.error("NaN detected! Resetting.")
+
+        except self.error as e:
+            logger.log(f"Simulator exception thrown: {e}")
+            observation = self.last_observation
+            reward = 0
+            done = 1
+            info = {}
+            self.reset()
+        return observation, reward, done, info
+
 
     def _inner_step(self, action):
         """
@@ -69,3 +71,5 @@ class MyWrapper(SconeWrapper):
     @property
     def results_dir(self):
         return self.unwrapped.results_dir
+    
+    

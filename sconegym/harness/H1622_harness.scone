@@ -1,6 +1,6 @@
 # Model used in simulation
 ModelHyfydy {
-	model_file = H1622v2k_trunkfix.hfd
+	model_file = H1622v2k_harness.hfd
 
 	# Set initial state
 	state_init_file = InitStateGait10.zml

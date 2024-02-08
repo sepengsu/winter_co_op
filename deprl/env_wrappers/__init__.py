@@ -1,8 +1,8 @@
-import deprl  # noqa
+import deprl, myutils  # noqa
 from deprl.env_wrappers.dm_wrapper import DMWrapper, OstrichDMWrapper
 from deprl.env_wrappers.gym_wrapper import GymWrapper
 from deprl.env_wrappers.scone_wrapper import SconeWrapper
-from myutils.custom_wrapper import MyWrapper
+from myutils.environments.custom_wrapper import MyWrapper
 
 
 def apply_wrapper(env):

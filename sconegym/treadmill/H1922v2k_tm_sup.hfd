@@ -14,23 +14,31 @@ model {
 		name = ground
 		mass = 0
 		inertia { x = 0 y = 0 z = 0 }
-		
+	}
+	body {
+		name = treadmill
+		mass = 0
+		inertia { x = 0 y = 0 z = 0 }
+		geometry {
+			type = box
+			pos { x = 0 y = 0.1 z = 0 }
+			dim { x = 6 y = 0.1 z = 1 }
+		}
+		mesh { pos [ -2 0.1 0 ] ori [ 90 0 0 ] shape { type = cylinder radius = 0.0304 height = 1.03 } }
+		mesh { pos [ -1 0.1 0 ] ori [ 90 0 0 ] shape { type = cylinder radius = 0.0304 height = 1.03 } }
+		mesh { pos [ 0 0.1 0 ] ori [ 90 0 0 ] shape { type = cylinder radius = 0.0304 height = 1.03 } }
+		mesh { pos [ 1 0.1 0 ] ori [ 90 0 0 ] shape { type = cylinder radius = 0.0304 height = 1.03 } }
+		mesh { pos [ 2 0.1 0 ] ori [ 90 0 0 ] shape { type = cylinder radius = 0.0304 height = 1.03 } }
 	}
 	body {
 		name = pelvis
 		mass = 11.777
 		inertia { x = 0.1028 y = 0.0871 z = 0.0579 }
 		pos { x = -0.0707 y = 0 z = 0 }
-		
 		mesh { file = sacrum.vtp pos { x = 0.0707 y = 0 z = 0 } }
 		mesh { file = pelvis.vtp pos { x = 0.0707 y = 0 z = 0 } }
 		mesh { file = l_pelvis.vtp pos { x = 0.0707 y = 0 z = 0 } }
-		
-		
-		
-		
 	}
-	
 	body {
 		name = femur_r
 		mass = 9.3014
@@ -121,30 +129,38 @@ model {
 		name = torso
 		mass = 34.2366
 		inertia { x = 1.4745 y = 0.7555 z = 1.4314 }
+		joint_6dof {
+			name = harness
+			parent = ground
+			pos_in_parent { x = -0.03 y = 1.49 z = 0 }
+			pos_in_child { x = 0 y = 0 z = 0 }
+			limits { x = 0..0 y = 0..0 z = 0..0 }
+			translation_limits { x = -0.1..0.1 y = -0.05..1 z = -0.1..0.1 }
+			stiffness = 1000
+			damping = 10
+			limit_stiffness = 10
+			limit_damping = 1
+		}
 		joint {
 			name = lumbar_joint
 			parent = pelvis
 			pos_in_parent { x = -0.03 y = 0.0815 z = 0 }
 			pos_in_child { x = 0.03 y = -0.32 z = 0 }
-			limits { x = 0..0 y = 0..0 z = 0..0 }
+			limits { x = -10..10 y = -10..10 z = -60..10 }
 		}
-		joint {
-			name = harness
-			parent = ground
-			pos_in_parent { x = -0.0707 y = 0 z = 0 }
-			pos_in_child { x = -0.03 y = -1.35 z = 0 }
-			limits { x = -10..10 y = -10..10 z = -10..10 }
-			limit_stiffness = 2000
-			
-		}
-		
-		
 		mesh { file = hat_spine.vtp pos { x = 0.03 y = -0.32 z = 0 } }
 		mesh { file = hat_jaw.vtp pos { x = 0.03 y = -0.32 z = 0 } }
 		mesh { file = hat_skull.vtp pos { x = 0.03 y = -0.32 z = 0 } }
 		mesh { file = hat_ribs.vtp pos { x = 0.03 y = -0.32 z = 0 } }
 	}
-	
+	joint_motor {
+		name = lumbar_motor
+		joint = lumbar_joint
+		max_torque = 1000
+		target_ori = [ 0 0 0 ]
+		stiffness = 0
+		damping = 20
+	}
 	point_path_muscle {
 		name = glut_med_r
 		max_isometric_force = 2045
@@ -556,11 +572,7 @@ model {
 	dof { name = hip_rotation_l source = -hip_ry_l range = -45..45 }
 	dof { name = knee_angle_l source = knee_rz_l range = -120..10 }
 	dof { name = ankle_angle_l source = ankle_rz_l range = -60..25 }
-	dof { name = lumbar_extension source = lumbar_joint_rz range = -90..90 }
-	dof { name = lumbar_bending source = lumbar_joint_rx range = -90..90 }
-	dof { name = lumbar_rotation source = lumbar_joint_ry range = -90..90 }
-	
-	dof { name = harness_tran_z source = harness_tz range = -0.05..0.05 default = 0}
-	dof { name = harness_tran_y source = harness_ty range = -1..1 }
-	dof { name = harness_tran_x source = harness_tx range = -30..30 }
+	dof { name = lumbar_extension source = lumbar_joint_rz range = -90..20 }
+	dof { name = lumbar_bending source = lumbar_joint_rx range = -20..20 }
+	dof { name = lumbar_rotation source = lumbar_joint_ry range = -20..20 }
 }

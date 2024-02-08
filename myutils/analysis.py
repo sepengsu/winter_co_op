@@ -22,6 +22,16 @@ def direxcept(obj):
 def namedict(obj):
     return {item.name():item for item in obj}
 
+def varsbody(obj):
+    attrs = direxcept(obj)
+    var = dict()
+    for attr in attrs:
+        try:
+            var[attr] = getattr(obj,attr)()
+        except:
+            pass
+    return var
+
 def ploting(results: pd.DataFrame,mode:str):
     '''
     mode에 따라 다른 그래프를 그린다.

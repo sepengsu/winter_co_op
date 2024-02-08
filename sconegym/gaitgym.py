@@ -106,7 +106,7 @@ class SconeGym(gym.Env, ABC):
             action = np.clip(action, 0, 1.0)
         if not self.has_reset:
             raise Exception("You have to call reset() once before step()")
-
+        
         if self.use_delayed_actuators:
             self.model.set_delayed_actuator_inputs(action)
         else:
@@ -392,7 +392,6 @@ class GaitGym(SconeGym):
         self.total_steps += 1
         self.steps += 1
         return self.custom_reward() +self.reward_total()
-        #return self.reward_total()
         
     def custom_reward(self):
         self._update_rwd_dict()
@@ -435,7 +434,7 @@ class GaitGym(SconeGym):
             np.sum(
                 np.where(self.model.muscle_activation_array() > threshold)[0].shape[0]
             )
-            / self.action_space.shape[0]
+            / self.model.muscle_activation_array().shape[0]
         )
 
     def _gaussian_vel_small(self):
@@ -494,28 +493,28 @@ class GaitGym(SconeGym):
             return True
         return False
 
-#     @property
-#     def horizon(self):
-#         # TODO put this in model kwargs such that it works with deprl
-#         return 10000
+    @property
+    def horizon(self):
+        # TODO put this in model kwargs such that it works with deprl
+        return 10000
 
 
-# # Tutorial environments to see features
-# # The Measure one needs to be fixed
+# Tutorial environments to see features
+# The Measure one needs to be fixed
 
-# # TODO @thomas add right model file
-# class GaitGymMeasureH0918(GaitGym):
-#     """
-#     Shows how to use custom measures from the .scone files in
-#     python.
-#     """
+# TODO @thomas add right model file
+class GaitGymMeasureH0918(GaitGym):
+    """
+    Shows how to use custom measures from the .scone files in
+    python.
+    """
 
-#     def __init__(self, *args, **kwargs):
-#         self.delay = False
-#         super().__init__(find_model_file("H0918_hfd_measure.scone"), *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        self.delay = False
+        super().__init__(find_model_file("H0918_hfd_measure.scone"), *args, **kwargs)
 
-#     def custom_reward(self):
-#         self.rwd_dict = self.create_rwd_dict()
-#         return self.model.current_measure()
+    def custom_reward(self):
+        self.rwd_dict = self.create_rwd_dict()
+        return self.model.current_measure()
 
 

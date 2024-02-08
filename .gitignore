@@ -9,6 +9,7 @@ dummy/
 depRL-main/
 **.zip
 **.log
+log.txt
 
 #마지막에는 commit으로 올려야하는 것 
 trainconfig/
