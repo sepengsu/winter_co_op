@@ -9,8 +9,7 @@ def get_directory_path():
         str: 사용자의 디렉토리 경로
     """
     dir_path = [
-        r"C:\Users\PC\Documents\SCONE\results",
-        r"C:\Users\na062\Documents\SCONE\results"
+        r"C:\Users\PC\Documents\SCONE\trainmodel"
     ]
     
     for path in dir_path:

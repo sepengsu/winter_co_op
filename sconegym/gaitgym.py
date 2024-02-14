@@ -276,7 +276,9 @@ class SconeGym(gym.Env, ABC):
 
     @property
     def results_dir(self):
-        return sconepy.scone_results_dir()
+        scone_dir = sconepy.scone_dir()
+        dirs = 'trainmodel'
+        return os.path.join(scone_dir, dirs)
 
 
 class GaitGym(SconeGym):

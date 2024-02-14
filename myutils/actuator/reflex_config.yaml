@@ -1,0 +1,33 @@
+lumbar_bending:
+  KP: 150
+  KV: 20
+  P0: 0
+  target: 5
+  axis:
+  - 1
+  - 0
+  - 0
+  delay: 0.005
+  source: torso
+lumbar_extension:
+  KP: 150
+  KV: 20
+  P0: 0
+  delay: 0.005
+  target: 0
+  axis:
+  - 0
+  - 0
+  - 1
+  source: torso
+lumbar_rotation:
+  KP: 150
+  KV: 30
+  P0: 0
+  target: 0
+  axis:
+  - 0
+  - 1
+  - 0
+  delay: 0.005
+  source: torso

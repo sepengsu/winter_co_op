@@ -1,3 +1,0 @@
-1. raw_z
-
-1622의 default에서 z position을 -reward 주는 형식!!!!

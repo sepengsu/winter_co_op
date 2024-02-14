@@ -5,7 +5,7 @@ import numpy as np
 
 from deprl.vendor.tonic import environments
 from deprl.vendor.tonic.utils import logger
-from myutils.environments.action_wrapper import ActionRescaler
+from myutils.environments.action_wrapper import ActionRescaler, ActionRescaler22
 
 
 def gym_environment(*args, **kwargs):
@@ -61,7 +61,10 @@ def build_environment(
 
     # Scale actions from [-1, 1]^n to the true action space if needed.
     if scaled_actions:
-        environment = ActionRescaler(environment)
+        if environment.action_space.shape[0] ==25:
+            environment = ActionRescaler(environment)
+        else: 
+            environment = ActionRescaler22(environment)
 
     environment.name = name
     environment.max_episode_steps = max_episode_steps

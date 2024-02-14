@@ -2,14 +2,14 @@ import deprl, myutils  # noqa
 from deprl.env_wrappers.dm_wrapper import DMWrapper, OstrichDMWrapper
 from deprl.env_wrappers.gym_wrapper import GymWrapper
 from deprl.env_wrappers.scone_wrapper import SconeWrapper
-from myutils.environments.custom_wrapper import MyWrapper
+from myutils.environments.custom_wrapper import MyWrapper, ActuatorWarpper
 
 
 def apply_wrapper(env):
-    if "control" in str(env).lower():
-        if env.name == "ostrich-run":
-            return OstrichDMWrapper(env)
-        return DMWrapper(env)
+    if 'fix' in str(env).lower():
+        return SconeWrapper(env)
+    elif "act" in str(env).lower() or 'motor' in str(env).lower():
+        return ActuatorWarpper(env)
     elif "1922" in str(env).lower():
         return MyWrapper(env)
     elif "scone" in str(env).lower():

@@ -61,8 +61,9 @@ class MyTrainer(Trainer):
                     observations, self.steps, muscle_states, greedy_episode
                 )
                 assert not np.isnan(actions.sum())
+
                 logger.store("train/action", actions, stats=True)
-                
+                actuator = self.environment
                 # Take a step in the environments.
                 observations, muscle_states, info = self.environment.step(actions)
                 if "env_infos" in info:
