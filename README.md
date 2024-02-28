@@ -6,14 +6,14 @@
 기간: 2023.12.18 - 2024.02.19
 
 <details>
-<summary>## 1. 연구 배경</summary>
+<summary>1. 연구 배경</summary>
 
 Gait Simulation의 방법론은 크게 CMA-ES(Covariance matrix adaptation evolution strategy)와 RL(Reinforcement Learning)이 있다. 이중 환자 보행 simulation과 다양한 환경에도 적용가능한 RL를 사용하고자 하였다. 이와 관련하여 SCONE 제작 연구소에서 발표한 DEP-RL(Differential Extrinsic Plasticity-RL)을 사용하고자 하였다. 하지만 여러 가지 문제점이 있어 이를 해결하는 것을 목표로 연구를 진행하였다.
 
 </details>
 
 <details>
-<summary>## 2. DEP-RL의 baseline 문제점</summary>
+<summary>2. DEP-RL의 baseline 문제점</summary>
 
 DEP-RL은 Musculoskeletal system에서 좋은 성능을 보이고 gait simulation에서 좋은 성능을 보인다. 하지만 크게 3가지 문제점이 있었다.
 
@@ -24,7 +24,7 @@ DEP-RL은 Musculoskeletal system에서 좋은 성능을 보이고 gait simulatio
 </details>
 
 <details>
-<summary>## 3. 해결 방안</summary>
+<summary>3. 해결 방안</summary>
 
 1. **Customization of body model**  
    H1622 모델에 대하여 Trunk의 좌우 움직임을 제한하기 위하여 2가지 구성요소를 통하여 구현  
@@ -43,7 +43,7 @@ DEP-RL은 Musculoskeletal system에서 좋은 성능을 보이고 gait simulatio
 </details>
 
 <details>
-<summary>## 4. 연구 결과</summary>
+<summary>4. 연구 결과</summary>
 
 #### 4.1. Custom body model  
 ![image](https://github.com/sepengsu/winter_co_op/assets/111292354/c9efa7e5-0c36-4274-b486-7e879a6473f6)  
