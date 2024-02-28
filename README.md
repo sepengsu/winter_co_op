@@ -1,6 +1,6 @@
 # DEP-RL based Gait Simulation
-
-![image](https://github.com/sepengsu/winter_co_op/assets/111292354/d245bc9d-b782-4b3d-b122-101104a1ab95)
+![image](https://github.com/sepengsu/winter_co_op/assets/111292354/1e09b26d-bdd0-43a2-8700-db8e04155351)
+![image](https://github.com/sepengsu/winter_co_op/assets/111292354/8b83c535-b237-43f3-9ab6-6502bb50c852)
 ## 주제: 강화학습 기반 정상인 보행 데이터 생성 
 기간: 2023.12.18 - 2024.02.19
 ## 1. 연구 배경 
