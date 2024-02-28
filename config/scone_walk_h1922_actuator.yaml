@@ -6,7 +6,7 @@ tonic:
     num_acts=22))"
   before_training: ''
   checkpoint: "last"
-  environment: "myutils.environments.Gym('sconewalk_h1922_motor-v1')"
+  environment: "myutils.environments.Gym('sconewalk_h1922_actuator-v1')"
   full_save: 1
   name: "sconewalk_h1922_v1"
   resume: true

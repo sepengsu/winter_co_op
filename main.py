@@ -6,6 +6,7 @@ from deprl.utils import load_checkpoint
 import torch
 import os
 from customreward import showingweight, settingrewardweight, settingtypeweight
+import datetime
 
 def main(config,setting = False):
     if "cpu_override" in config["tonic"] and config["tonic"]["cpu_override"]:
@@ -42,7 +43,6 @@ def train(config,setting = False):
         env_args=config["env_args"],
     )
     environment.initialize(seed=tonic_conf["seed"])
-
 
     # Build the testing environment.
     _test_environment = (

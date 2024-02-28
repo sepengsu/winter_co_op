@@ -2,15 +2,16 @@ import deprl, myutils  # noqa
 from deprl.env_wrappers.dm_wrapper import DMWrapper, OstrichDMWrapper
 from deprl.env_wrappers.gym_wrapper import GymWrapper
 from deprl.env_wrappers.scone_wrapper import SconeWrapper
-from myutils.environments.custom_wrapper import MyWrapper, ActuatorWarpper
-
+from myutils.environments.custom_wrapper import MyWrapper, ActuatorWrapper, ClipCustomWrapper, MotorWarpper
 
 def apply_wrapper(env):
-    if 'fix' in str(env).lower():
-        return SconeWrapper(env)
-    elif "act" in str(env).lower() or 'motor' in str(env).lower():
-        return ActuatorWarpper(env)
-    elif "1922" in str(env).lower():
+    if 'fix_clip' in str(env).lower():
+        return ClipCustomWrapper(env)
+    elif "actuator" in str(env).lower():
+        return ActuatorWrapper(env)
+    elif 'motor' in str(env).lower():
+        return MotorWarpper(env)
+    elif "1925" in str(env).lower():
         return MyWrapper(env)
     elif "scone" in str(env).lower():
         return SconeWrapper(env)

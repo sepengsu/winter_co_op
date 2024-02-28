@@ -8,6 +8,7 @@ from makeconfig import Config
 import sys
 buttonlist = ['checkbox', 'selectbox']
 gym_list = ['0918','1622','1922','2190']
+model_list = ['none','motor','actuator','treadmill']
 _current_dir =  r"C:\Users\PC\Desktop\SJW\dep\customreward"
 customreward_list = [name.split('\\')[-1] for name in os.listdir(_current_dir) if (not name.startswith('__')) and not (name=='reward.py')]
 
@@ -20,6 +21,7 @@ class MyTkinter:
         self.window.resizable(True, True)
         self.window.config(bg="white")
         self.trainoption = Option()
+        self.config = Config()
         self.create_widgets()
         self.window.protocol("WM_DELETE_WINDOW", self.close_window)  # Add this line
         self.window.mainloop()
@@ -30,6 +32,8 @@ class MyTkinter:
         self.firstframe = Frame(self.window)
         self.name_widgets()
         self.gym_widgets()
+        self.model_widgets()
+        self.intput_button()
         self.firstframe.pack(side = 'top')
         self.option_widgets()
 
@@ -40,12 +44,8 @@ class MyTkinter:
         name_label.pack()
 
         # 이름 입력 텍스트 상자
-        name_entry = Entry(self.nameframe)
-        name_entry.pack()
-
-        # 확인 버튼
-        confirm_button = Button(self.nameframe, text="확인", command=lambda: self.get_name(name_entry.get()))
-        confirm_button.pack()
+        self.name_entry = Entry(self.nameframe)
+        self.name_entry.pack()
 
         self.nameframe.pack(side = 'left')
 
@@ -56,17 +56,38 @@ class MyTkinter:
         option_label.pack()
 
         # 옵션 콤보 상자
-        option_combobox = ttk.Combobox(self.optionframe, values=gym_list, state="readonly")
-        option_combobox.pack()
-
-        # 확인 버튼
-        confirm_button = Button(self.optionframe, text="확인", command=lambda: self.gym_command(option_combobox.get()))
-        confirm_button.pack()
+        self.gym_combobox = ttk.Combobox(self.optionframe, values=gym_list, state="readonly")
+        self.gym_combobox.pack()
 
         self.optionframe.pack(side='left')
-    def gym_command(self, option):
-        self.trainoption.get_option(option)
-        self.input_widgets()
+    
+    def model_widgets(self):
+        self.modelframe = Frame(self.firstframe)
+        # 옵션 레이블
+        option_label = Label(self.modelframe, text="모델 옵션")
+        option_label.pack()
+
+        # 옵션 콤보 상자
+        self.model_box = ttk.Combobox(self.modelframe, values=model_list, state="readonly")
+        self.model_box.pack()
+
+        self.modelframe.pack(side='left')
+
+    def intput_button(self):
+        def input_command():
+            name = self.name_entry.get()
+            gym = self.gym_combobox.get()
+            model = self.model_box.get()
+            name = f"scone_walk_{gym}_{model}" if gym and model else None
+            name = f"scone_walk_{gym}" if model=='none' else name
+            print(name)
+
+        self.inputframe = Frame(self.firstframe)
+        confirm_button = Button(self.inputframe, text="입력", command=input_command)
+        confirm_button.pack(side='left')
+        self.inputframe.pack(side='left')     
+        
+
 
     def option_widgets(self):
         # 옵션 프레임

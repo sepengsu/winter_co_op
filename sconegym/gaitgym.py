@@ -111,7 +111,6 @@ class SconeGym(gym.Env, ABC):
             self.model.set_delayed_actuator_inputs(action)
         else:
             self.model.set_actuator_inputs(action)
-
         self.model.advance_simulation_to(self.time + self.step_size)
         reward = self._get_rew()
         obs = self._get_obs() # prev_acts, prev_excs, GRFBefore 업데이트 
@@ -287,8 +286,6 @@ class GaitGym(SconeGym):
         super().__init__(model_file, *args, **kwargs)
         self.rwd_dict = None
         self.mass = np.sum([x.mass() for x in self.model.bodies()])
-        #여기부터는 내가 추가한 부분
-        # delta 생성을 위한 객체 생성
         self.grf =GRFBefore(self.model) # 처음 부분 생성
         self.rwd_type_weights = rwd_type_weights if len(rwd_type_weights)>0 else None
         self.rwd_weights = rwd_weights if len(rwd_weights)>0 else None

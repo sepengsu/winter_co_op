@@ -27,6 +27,7 @@ class MyTkinter:
         sys.exit()  # Add this line
 
     def create_widgets(self):
+        cleaning()
         self.create_nameselectbox()
         self.create_checkboxes()  # Added checkboxes
         self.create_button()
@@ -142,8 +143,21 @@ def slicing(name: str):
         name = re.sub(sliced, '', name)
     return name
 
+def cleaning():
+    folder_path = r"C:\Users\PC\Desktop\SJW\dep\trainconfig"
+    file_names = os.listdir(folder_path)
+    yaml_files = [file[:-5] for file in file_names if file.endswith(".yaml")]
+    model_folder = r"C:\Users\PC\Documents\SCONE\trainmodel"
+    model_files = os.listdir(model_folder)
+    for file in yaml_files:
+        if file not in model_files:
+            os.remove(folder_path + "\\" + file + ".yaml")
+            print("Deleted " + file + ".yaml")
+
+
+
 
 if __name__ == "__main__":
     MyTkinter()
-
+    pass
 
