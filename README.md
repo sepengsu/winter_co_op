@@ -58,3 +58,7 @@ Custom reward function을 도입--> pelvis tilt의 불안정성 문제 일부 �
 ![image](https://github.com/sepengsu/winter_co_op/assets/111292354/44a4cdb5-d788-4331-88d6-825f4374a5f6)
 
 </details>
+## 사용 라이브러리
+
+- DEP_RL: https://github.com/martius-lab/depRL
+- Sconegym: https://github.com/tgeijten/sconegym
