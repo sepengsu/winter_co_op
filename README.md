@@ -20,13 +20,11 @@ Reward function은 두가지 목적에 대한 수식을 각각 구현하여 목�
 2.1. Balance:  
 2.2. GRFDelta:  
 
-## 4. 연구 결과
-
-## 5. 결론 및 향후 방향성
-
-
-   
-
+## 4. 연구 결과 
+4.1. Custom body model
+![image](https://github.com/sepengsu/winter_co_op/assets/111292354/c9efa7e5-0c36-4274-b486-7e879a6473f6)  
+4.2. combined Model
+![image](https://github.com/sepengsu/winter_co_op/assets/111292354/e866ae8b-5343-4737-a7f5-c93ddc87d0f7)
 
 
 ## 사용 라이브러리
