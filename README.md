@@ -18,9 +18,9 @@ H1622 모델에 대하여 Trunk의 좌우 움직임을 제한하기 위하여 2�
 1.2. Harness: trunk translation limit를 구현  
 2. Customization reward function
 Reward function은 두가지 목적에 대한 수식을 각각 구현하여 목표를 설정하였다.  
-2.1. Balance
-COM, trunk(상반신의 COM)의 z축 cost 도입
-좌우 방향으로 몸을 기울이지 않고 걷도록 학습
+2.1. Balance  
+COM, trunk(상반신의 COM)의 z축 cost 도입  
+좌우 방향으로 몸을 기울이지 않고 걷도록 학습  
 2.2. GRFDelta
 물리적 의미: Impact
 Peak GRF 줄이는 역할
