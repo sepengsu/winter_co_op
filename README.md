@@ -8,7 +8,11 @@
 Gait Simulaton의 방법론은 크게 CMA-ES(Covariance matrix adaptation evolation strategy)와 RL(Reinforcement Learning)이 있다. 이중 환자 보행 simulation과 다양한 환경에도 적용가능한 RL를 사용하고자 하였다. 이와 관련하여 SCONE 제작 연구소에서 발표한 DEP-RL(Differential Extrinsic Plasticity-RL)을 사용하고자 하였다. 하지만 여러가지 문제점이 있어 이를 해결하는 것을 목표로 연구를 진행하였다.
 
 ## 2. DEP-RL의 baseline 문제점
-DEP-RL은 Musuloskeletal system에서 좋은 성능을 보이고 gait simulation에서 좋은 성능을 보인다. 하지만 
+DEP-RL은 Musuloskeletal system에서 좋은 성능을 보이고 gait simulation에서 좋은 성능을 보인다. 하지만 크게 3가지 문제점이 있었다.
+1. 느린 학습 속도
+2. Unstability of trunk: 몸이 좌우로 흔들며 걷는 문제
+3. Peak GRF(Ground react Force oon foot) 문제
+## 3. 
 
 
 
