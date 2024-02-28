@@ -1,4 +1,5 @@
-# 2023 겨울 코옵 프로젝트 
+# DEP-RL based Gait Simulation
+
 ![image](https://github.com/sepengsu/winter_co_op/assets/111292354/d245bc9d-b782-4b3d-b122-101104a1ab95)
 ## 주제: 강화학습 기반 정상인 보행 데이터 생성 
 기간: 2023.12.18 - 2024.02.12
