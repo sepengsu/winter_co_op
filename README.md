@@ -16,6 +16,16 @@ H1622 모델에 대하여 Trunk의 좌우 움직임을 제한하기 위하여 2�
 1.1. Joint motor: trunk muscle 보조 torque로 3축 torque 구현  
 1.2. Harness: trunk translation limit를 구현  
 2. Customization reward function
+Reward function은 두가지 목적에 대한 수식을 각각 구현하여 목표를 설정하였다.
+2.1. Balance:
+2.2. GRFDelta:
+
+## 4. 연구 결과
+
+## 5. 결론 및 향후 방향성
+
+
+   
 
 
 
