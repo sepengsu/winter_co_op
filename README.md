@@ -1,4 +1,5 @@
-![image](https://github.com/sepengsu/winter_co_op/assets/111292354/95436f89-6a91-44c4-a931-ef0787c48507)# 2023 겨울 코옵 프로젝트
+# 2023 겨울 코옵 프로젝트 
+![image](https://github.com/sepengsu/winter_co_op/assets/111292354/95436f89-6a91-44c4-a931-ef0787c48507)
 ![ddd](https://github.com/sepengsu/winter_co_op/assets/111292354/3573eb4b-9ff7-4211-93a5-1ca8cbd39391)
 ![image](https://github.com/sepengsu/winter_co_op/assets/111292354/d245bc9d-b782-4b3d-b122-101104a1ab95)
 ## 주제: 강화학습 기반 정상인 보행 데이터 생성 
