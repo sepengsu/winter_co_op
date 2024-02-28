@@ -11,11 +11,10 @@ DEP-RL은 Musuloskeletal system에서 좋은 성능을 보이고 gait simulation
 2. Unstability of trunk: 몸이 좌우로 흔들며 걷는 문제
 3. Peak GRF(Ground react Force oon foot) 문제
 ## 3. 해결 방안
-1. Customization of body model
-
-H1622 모델에 대하여 Trunk의 좌우 움직임을 제한하기 위하여 2가지 구성요소를 통하여 구현
-1.1. Joint motor:
-1.2. Harness
+1. Customization of body model  
+H1622 모델에 대하여 Trunk의 좌우 움직임을 제한하기 위하여 2가지 구성요소를 통하여 구현  
+1.1. Joint motor: trunk muscle 보조 torque로 3축 torque 구현  
+1.2. Harness: trunk translation limit를 구현  
 2. Customization reward function
 
 
